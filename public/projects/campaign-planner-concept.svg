@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#181719"/>
+  <g fill="none" stroke="#c5a475" opacity=".45">
+    <circle cx="920" cy="300" r="180" stroke-dasharray="700 430"/>
+    <path d="M820 210h200v180H820zM820 250h200m-150-60v40m100-40v40"/>
+    <circle cx="870" cy="290" r="5"/><circle cx="920" cy="290" r="5"/><circle cx="970" cy="290" r="5"/>
+    <path d="m900 340 15 15 35-35"/>
+  </g>
+  <text x="80" y="240" font-family="Georgia,serif" font-size="52" fill="#e9e3dc">CampaignPlanner</text>
+  <g font-family="Arial,sans-serif" fill="#c5a475" font-size="22">
+    <text x="80" y="300">Campagnes · Dates · Disponibilités</text>
+    <text x="80" y="510" font-size="16">ILLUSTRATION CONCEPTUELLE — PAS UNE CAPTURE</text>
+  </g>
+</svg>

@@ -1,0 +1,226 @@
+:host {
+    display: block;
+    position: fixed;
+    left: clamp(12px, 2.5vw, 42px);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+}
+
+.quest-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.quest-progress[hidden] {
+    display: none;
+}
+
+.chapter-notice {
+    position: absolute;
+    top: calc(100% + 1.25rem);
+    left: 0;
+    width: max-content;
+    max-width: min(19rem, calc(100vw - 2rem));
+    box-sizing: border-box;
+    padding: .65rem .85rem;
+    border: 1px solid #c5a47533;
+    border-radius: 4px;
+    background: #191618ed;
+    color: #dfc6a2;
+    font: 500 .65rem/1.6 'Segoe UI', Arial, sans-serif;
+    letter-spacing: .1em;
+    pointer-events: none;
+}
+
+.chapter-notice[hidden] {
+    display: none;
+}
+
+.chapter-notice__line {
+    display: block;
+    height: 1px;
+    margin-top: .4rem;
+    background: linear-gradient(90deg, #c5a475, transparent);
+    transform-origin: left;
+}
+
+.quest-progress__heading,
+.quest-progress__counter {
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    color: #9c7778;
+}
+
+.quest-progress__track {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    padding-left: 0;
+}
+
+/* Rail vertical */
+.quest-progress__track::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: rgba(197, 164, 117, 0.18);
+}
+
+/* Progression lumineuse */
+.quest-progress__fill {
+    position: absolute;
+    left: 5px;
+    top: 6px;
+    width: 1px;
+    height: 0;
+    max-height: calc(100% - 12px);
+
+    background: linear-gradient(to bottom,
+            #79232e,
+            #c5a475);
+
+    box-shadow: 0 0 8px rgba(182, 74, 83, 0.45);
+    pointer-events: none;
+}
+
+.quest-progress__chapter {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+
+    text-decoration: none;
+    color: #84797b;
+    transition: color 250ms ease;
+}
+
+.quest-progress__chapter[hidden] {
+    display: none;
+}
+
+.quest-progress__marker {
+    width: 11px;
+    height: 11px;
+    flex: none;
+
+    border: 1px solid #705157;
+    border-radius: 50%;
+    background: #181719;
+
+    transition:
+        background 250ms ease,
+        border-color 250ms ease,
+        box-shadow 250ms ease,
+        transform 250ms ease;
+}
+
+.quest-progress__label {
+    font-size: 0.72rem;
+    white-space: nowrap;
+    opacity: 0.55;
+    transition: opacity 250ms ease;
+}
+
+/* Chapitre actif */
+.quest-progress__chapter.is-active {
+    color: #e9e3dc;
+}
+
+.quest-progress__chapter.is-active .quest-progress__marker {
+    background: #b64a53;
+    border-color: #c5a475;
+    box-shadow:
+        0 0 8px rgba(182, 74, 83, 0.5),
+        0 0 16px rgba(182, 74, 83, 0.15);
+    transform: scale(1.2);
+}
+
+.quest-progress__chapter.is-active .quest-progress__label {
+    opacity: 1;
+}
+
+.quest-progress__chapter:hover,
+.quest-progress__chapter:focus-visible {
+    color: #e9e3dc;
+}
+
+.quest-progress__chapter:hover .quest-progress__label,
+.quest-progress__chapter:focus-visible .quest-progress__label {
+    opacity: 1;
+}
+
+.quest-progress__chapter:focus-visible {
+    outline: 1px solid #c5a475;
+    outline-offset: 6px;
+}
+
+/* Tablette : garder les marqueurs, masquer les libellés */
+@media (max-width: 1350px) {
+
+    .quest-progress__heading,
+    .quest-progress__label,
+    .quest-progress__counter {
+        display: none;
+    }
+}
+
+/* Mobile : barre horizontale en bas */
+@media (max-width: 650px) {
+    .chapter-notice {
+        top: auto;
+        bottom: calc(100% + .75rem);
+        left: 50%;
+        translate: -50% 0;
+        width: 18rem;
+        text-align: center;
+    }
+
+    :host {
+        left: 50%;
+        top: auto;
+        bottom: 1rem;
+        transform: translateX(-50%);
+    }
+
+    .quest-progress {
+        padding: 0.85rem 1.25rem;
+        border: 1px solid #493238;
+        border-radius: 30px;
+        background: rgba(25, 22, 24, 0.95);
+        backdrop-filter: blur(12px);
+    }
+
+    .quest-progress__track {
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+
+    .quest-progress__track::before {
+        left: 6px;
+        right: 6px;
+        top: 5px;
+        bottom: auto;
+        width: auto;
+        height: 1px;
+    }
+
+    .quest-progress__fill {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .quest-progress__chapter,
+    .quest-progress__marker,
+    .quest-progress__label {
+        transition: none;
+    }
+}

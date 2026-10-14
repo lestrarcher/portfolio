@@ -1,0 +1,54 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><title>Tests visionneuse</title><body><iframe id="site" src="/projects/jdr-companion" style="width:1440px;height:900px"></iframe><pre id="results">pending</pre><script type="module">
+import { projects } from '/src/data/projects.js';
+const frame=document.querySelector('iframe'),results=[];
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const check=(name,pass)=>results.push({name,pass});
+try{
+ for(const project of projects){
+  frame.src='/projects/'+project.id+'?lightbox-test='+Date.now();
+  let detail;
+  for(let i=0;i<100;i++){detail=frame.contentDocument?.querySelector('project-detail');if(detail?.getAttribute('project-id')===project.id&&detail.shadowRoot.querySelector('dialog'))break;await sleep(100);}
+  const win=frame.contentWindow,doc=win.document,root=detail.shadowRoot,gallery=root.querySelector('.gallery'),stage=root.querySelector('.gallery-stage'),image=root.querySelector('.gallery-image'),dialog=root.querySelector('dialog'),viewer=dialog.querySelector('img'),viewport=dialog.querySelector('.lightbox-viewport');
+  doc.documentElement.style.scrollBehavior='auto';
+  const errors=[];win.addEventListener('error',e=>errors.push(e.message));
+  const thumbs=[...root.querySelectorAll('.gallery-thumbnail')];
+  for(const width of [320,375,768,1440]){
+   frame.style.width=width+'px';await sleep(100);gallery.scrollIntoView({behavior:'instant'});await sleep(100);
+   const stable=gallery.getBoundingClientRect().height;
+   for(let i=0;i<thumbs.length;i++){
+    thumbs[i].click();await image.decode();await sleep(50);
+    check(project.id+' format '+width+' '+i,root.querySelector('.gallery-presentation').classList.contains('is-portrait')===(image.naturalWidth<image.naturalHeight));
+    check(project.id+' stable '+width+' '+i,Math.abs(gallery.getBoundingClientRect().height-stable)<2);
+    check(project.id+' compact '+width+' '+i,image.naturalWidth>=image.naturalHeight||stage.getBoundingClientRect().width<gallery.getBoundingClientRect().width);
+    const scroll=win.scrollY;stage.focus({preventScroll:true});stage.click();await viewer.decode();await sleep(80);
+    check(project.id+' modal '+width,dialog.open&&dialog.getAttribute('aria-modal')==='true'&&dialog.contains(root.activeElement));
+    check(project.id+' scroll locked '+width,doc.documentElement.style.overflow==='hidden');
+    check(project.id+' image '+i,viewer.getAttribute('src')===project.gallery[i].src&&viewer.alt===project.gallery[i].alt);
+    for(let z=0;z<6;z++)dialog.querySelector('[data-zoom="0.5"]').click();
+    await sleep(100);
+    check(project.id+' zoom bounded '+width,dialog.querySelector('[data-reset]').textContent==='400 %'&&dialog.querySelector('[data-zoom="0.5"]').disabled);
+    check(project.id+' pan area '+width,viewport.scrollWidth>viewport.clientWidth||viewport.scrollHeight>viewport.clientHeight);
+    viewport.scrollTop=viewport.scrollHeight;viewport.scrollLeft=viewport.scrollWidth;
+    check(project.id+' controls stationary '+width,dialog.querySelector('[data-close]').getBoundingClientRect().top>=0&&dialog.querySelector('[data-close]').getBoundingClientRect().right<=win.innerWidth);
+    dialog.querySelector('[data-reset]').click();check(project.id+' reset '+width,dialog.querySelector('[data-reset]').textContent==='100 %');
+    dialog.querySelector('[data-close]').click();await sleep(50);
+    check(project.id+' restore '+width,!dialog.open&&root.activeElement===stage&&Math.abs(win.scrollY-scroll)<2&&doc.documentElement.style.overflow!=='hidden');
+   }
+   check(project.id+' no overflow '+width,doc.documentElement.scrollWidth<=win.innerWidth);
+  }
+  stage.click();await sleep(50);
+  if(thumbs.length>1){
+   dialog.dispatchEvent(new win.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));await sleep(50);
+   check(project.id+' keyboard next',root.querySelector('.gallery-counter').textContent.startsWith('1 /'));
+   dialog.querySelector('[data-step="-1"]').click();check(project.id+' previous',root.querySelector('.gallery-counter').textContent.startsWith(String(thumbs.length)+' /'));
+  }
+  viewport.focus();viewport.dispatchEvent(new win.KeyboardEvent('keydown',{key:'Tab',bubbles:true,cancelable:true}));
+  check(project.id+' focus stays inside',dialog.contains(root.activeElement));
+  dialog.dispatchEvent(new win.Event('cancel',{cancelable:true}));await sleep(50);check(project.id+' escape close',!dialog.open&&root.activeElement===stage);
+  stage.click();dialog.dispatchEvent(new win.PointerEvent('pointerdown',{bubbles:true}));dialog.click();await sleep(50);check(project.id+' backdrop close',!dialog.open);
+  stage.click();detail.remove();check(project.id+' disconnect unlock',doc.documentElement.style.overflow!=='hidden'&&!dialog.open);
+  check(project.id+' runtime errors',errors.length===0);
+ }
+}catch(error){results.push({name:'exception',pass:false,detail:error.stack});}
+document.querySelector('#results').textContent=JSON.stringify({checks:results.length,failures:results.filter(result=>!result.pass)});
+</script></body></html>

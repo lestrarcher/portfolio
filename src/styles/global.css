@@ -1,0 +1,48 @@
+@import './variables.css';
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box
+}
+
+html {
+    scroll-behavior: smooth
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at 85% 8%, rgba(121, 35, 46, .10), transparent 40%), radial-gradient(ellipse at 5% 80%, rgba(121, 35, 46, .05), transparent 45%), #171719;
+    color: var(--color-text);
+    font: 400 1rem/1.65 var(--font-body)
+}
+
+a {
+    color: inherit
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px
+}
+
+::selection {
+    background: var(--color-blood);
+    color: #fff
+}
+
+@media(prefers-reduced-motion:reduce) {
+    html {
+        scroll-behavior: auto
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important
+    }
+}

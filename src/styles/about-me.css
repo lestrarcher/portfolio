@@ -1,0 +1,462 @@
+:host {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    padding: var(--section-space, 5rem) clamp(1.25rem, 5vw, 5rem);
+    background: none;
+    color: var(--color-text);
+    font-family: var(--font-body)
+}
+
+:host *,
+:host *::before,
+:host *::after {
+    box-sizing: border-box
+}
+
+
+#about-me {
+    width: 100%;
+    /* margin: 3rem auto; */
+    padding: 1.75rem 0 3rem;
+    border-top: 1px solid var(--color-border, #543238);
+    border-bottom: 1px solid var(--color-border, #543238);
+    display: flex;
+    gap: 1rem;
+}
+
+.about-me-presentation {
+    width: 30%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    margin-bottom: 1.5rem;
+    background-color: rgba(33, 30, 33, .94);
+}
+
+.about-me-presentation__subtitle,
+.about-me-skills__subtitle {
+    margin: 0;
+    color: var(--color-accent, #b64a53);
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    font-size: .72rem;
+    font-weight: 600;
+}
+
+.about-me-presentation__title {}
+
+.about-me-presentation__description {}
+
+.about-me-presentation__link {
+    color: var(--color-text);
+    background-color: rgba(182, 74, 83, 0.6);
+    padding: 0.5rem;
+    text-decoration: none;
+    font-size: .8rem;
+    letter-spacing: .05em;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: .25rem;
+}
+
+.about-me-skills {
+    width: 70%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+
+    background-color: rgba(33, 30, 33, .94);
+}
+
+.about-me-skills__list {
+    display: flex;
+    padding: 1rem;
+    justify-content: space-between;
+    gap: 1rem
+}
+
+.about-me-skills__separator {
+    color: var(--color-accent, #b64a53);
+    text-decoration: none;
+    font-size: .8rem;
+    letter-spacing: .05em;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: .25rem;
+}
+
+
+feat-card {
+    display: block;
+    min-width: 0;
+}
+
+skill-card {
+    display: block;
+    min-width: 0;
+}
+
+@media (max-width: 850px) {
+    /* .about-me-list__display {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .about-me-list__display project-card:last-child {
+        display: none;
+    } */
+}
+
+@media (max-width: 560px) {
+    /* .about-me-list {
+        gap: .4rem;
+    }
+
+    .about-me-list__display {
+        grid-template-columns: 1fr;
+    }
+
+    .about-me-list__display project-card:not(:first-child) {
+        display: none;
+    } */
+}
+
+/* Editorial refinement */
+#about-me {
+    max-width: var(--content-width, 1280px);
+    margin-inline: auto;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    border-color: rgba(173, 98, 107, .22)
+}
+
+#about-me h1,
+#about-me h2 {
+    line-height: 1.2
+}
+
+#about-me p {
+    line-height: 1.7
+}
+
+@media(max-width:900px) {
+    #about-me {
+        flex-direction: column
+    }
+
+    .home-presentation,
+    .home-skills,
+    .about-me-presentation,
+    .about-me-skills,
+    .skills-presentation {
+        width: 100%
+    }
+}
+
+@media(max-width:600px) {
+    :host {
+        padding: 3.5rem 1.25rem
+    }
+}
+
+.about-me-presentation,
+.about-me-skills {
+    padding: 1.5rem;
+    border: 1px solid rgba(173, 98, 107, .15);
+    border-radius: 8px
+}
+
+.about-me-skills__list {
+    flex-wrap: wrap;
+    gap: 1rem
+}
+
+/* CSS à inclure dans chaque Shadow Root utilisant .blood-btn */
+/* Blood Button — Édition Prestige */
+
+.blood-btn {
+    --blood: #542630;
+    --blood-dark: #351b23;
+    --gold: #c5a475;
+
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .7rem;
+
+    max-width: 100%;
+    min-height: 2.8rem;
+    padding: .75rem 1.4rem;
+
+    color: #f1e9df;
+    background:
+        linear-gradient(145deg,
+            rgba(255, 255, 255, .065),
+            transparent 45%),
+        linear-gradient(180deg,
+            var(--blood),
+            var(--blood-dark));
+
+    border: 1px solid rgba(197, 164, 117, .55);
+    border-radius: 2px;
+
+    font: 500 .82rem/1.3 var(--font-body);
+    letter-spacing: .025em;
+    text-decoration: none;
+    text-align: center;
+
+    box-shadow:
+        inset 0 0 0 3px rgba(31, 18, 22, .85),
+        inset 0 0 0 4px rgba(197, 164, 117, .22),
+        0 4px 14px rgba(0, 0, 0, .12);
+
+    cursor: pointer;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background-color .25s ease;
+}
+
+/* Petit ornement en losange */
+.blood-btn::before {
+    content: "✦";
+    color: var(--gold);
+    font-size: .65rem;
+    line-height: 1;
+    opacity: .85;
+    transition: transform .25s ease;
+}
+
+/* Reflet subtil */
+.blood-btn::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    z-index: -1;
+    pointer-events: none;
+
+    background: linear-gradient(110deg,
+            transparent 25%,
+            rgba(255, 230, 190, .075) 50%,
+            transparent 75%);
+
+    opacity: 0;
+    transition: opacity .25s ease;
+}
+
+.blood-btn:hover,
+.blood-btn:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--gold);
+
+    box-shadow:
+        inset 0 0 0 3px rgba(31, 18, 22, .85),
+        inset 0 0 0 4px rgba(197, 164, 117, .4),
+        0 7px 20px rgba(75, 25, 36, .3);
+}
+
+.blood-btn:hover::before,
+.blood-btn:focus-visible::before {
+    transform: rotate(45deg);
+}
+
+.blood-btn:hover::after,
+.blood-btn:focus-visible::after {
+    opacity: 1;
+}
+
+.blood-btn:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+}
+
+.blood-btn:active {
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .blood-btn,
+    .blood-btn::before,
+    .blood-btn::after {
+        transition: none;
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .blood-btn {
+        transition: none
+    }
+}
+
+/* Fiche de personnage 2024 — mise en page des compétences */
+.about-me-skills__heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem
+}
+
+.about-me-skills__count {
+    font-size: .66rem;
+    letter-spacing: .13em;
+    color: var(--color-muted)
+}
+
+.about-me-skills__list--attributes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .85rem;
+    padding: 1rem 0 1.3rem;
+    align-items: stretch
+}
+
+.about-me-skills__list--traits {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .7rem;
+    padding: 1.2rem 0 0;
+    align-items: stretch
+}
+
+.about-me-skills__list--attributes skill-card,
+.about-me-skills__list--traits feat-card {
+    width: 100%;
+    min-width: 0
+}
+
+.about-me-presentation,
+.about-me-skills {
+    background: var(--color-surface, #211e21);
+    border-color: var(--color-border, #423239)
+}
+
+@media(max-width:1050px) and (min-width:901px) {
+    .about-me-skills__list--attributes {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    .about-me-skills__list--traits {
+        grid-template-columns: 1fr
+    }
+}
+
+@media(max-width:650px) {
+    .about-me-skills__list--attributes {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+    }
+
+    .about-me-skills__list--traits {
+        grid-template-columns: 1fr
+    }
+}
+
+@media(max-width:380px) {
+    .about-me-skills__list--attributes {
+        grid-template-columns: 1fr
+    }
+
+    .about-me-skills__heading {
+        flex-wrap: wrap
+    }
+}
+
+/* Édition prestige : page de grimoire, même grille et même contenu. */
+#about-me {
+    position: relative;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    align-items: stretch
+}
+
+.about-me-presentation,
+.about-me-skills {
+    position: relative;
+    border-radius: 3px;
+    border-color: color-mix(in srgb, var(--color-gold, #c5a475) 23%, var(--color-border));
+    background: var(--color-surface, #211e21);
+    box-shadow: inset 0 0 0 4px var(--color-surface, #211e21), inset 0 0 0 5px color-mix(in srgb, var(--color-gold, #c5a475) 13%, transparent), 0 12px 35px #0002
+}
+
+.about-me-presentation::before,
+.about-me-skills::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 11px;
+    width: 18px;
+    height: 18px;
+    border-top: 1px solid var(--color-gold, #c5a475);
+    border-left: 1px solid var(--color-gold, #c5a475);
+    opacity: .65;
+    pointer-events: none
+}
+
+.about-me-presentation::after,
+.about-me-skills::after {
+    content: '';
+    position: absolute;
+    right: 11px;
+    bottom: 11px;
+    width: 18px;
+    height: 18px;
+    border-right: 1px solid var(--color-gold, #c5a475);
+    border-bottom: 1px solid var(--color-gold, #c5a475);
+    opacity: .65;
+    pointer-events: none
+}
+
+.about-me-skills__heading {
+    position: relative;
+    padding: 0 0 .55rem
+}
+
+.about-me-skills__heading::after {
+    content: '✦';
+    position: absolute;
+    bottom: -.68rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0 .5rem;
+    background: var(--color-surface, #211e21);
+    color: var(--color-gold, #c5a475);
+    font-size: .75rem
+}
+
+.about-me-skills__separator {
+    border-bottom-color: color-mix(in srgb, var(--color-gold, #c5a475) 42%, var(--color-border))
+}
+
+.about-me-skills__list--attributes {
+    gap: .75rem;
+    padding-top: 1.2rem;
+    padding-bottom: 1.4rem
+}
+
+.about-me-skills__list--traits {
+    gap: .65rem
+}
+
+.about-me-presentation__title {
+    font-family: var(--font-display, Georgia, serif);
+    font-weight: 600;
+    letter-spacing: -.015em
+}
+
+.about-me-presentation__description {
+    color: var(--color-muted);
+    line-height: 1.85
+}
+
+@media(max-width:650px) {
+
+    .about-me-presentation,
+    .about-me-skills {
+        padding: 1.15rem
+    }
+
+    .about-me-skills__list--attributes {
+        gap: .55rem
+    }
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520">
+  <rect width="900" height="520" fill="#181719"/>
+  <g fill="none" stroke="#c5a475" opacity=".55">
+    <circle cx="680" cy="260" r="145" stroke-dasharray="650 260"/>
+    <path d="M620 170h95l35 35v145H620zM715 170v35h35m-100 25h70m-70 30h70m-70 30h40"/>
+  </g>
+  <text x="65" y="235" font-family="Georgia,serif" font-size="62" fill="#e9e3dc">eMissions</text>
+  <text x="65" y="285" font-family="Arial,sans-serif" font-size="22" fill="#c5a475">Missions et frais professionnels</text>
+  <text x="65" y="460" font-family="Arial,sans-serif" font-size="16" fill="#a99a99">VISUEL CONCEPTUEL · AUCUNE DONNÉE INTERNE</text>
+</svg>

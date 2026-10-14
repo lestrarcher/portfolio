@@ -1,0 +1,45 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><title>Tests galerie</title><body><iframe id="site" src="/projects/jdr-companion" style="width:1440px;height:900px"></iframe><pre id="results">pending</pre><script type="module">
+import { projects } from '/src/data/projects.js';
+const frame=document.querySelector('iframe'),results=[];
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const check=(name,pass)=>results.push({name,pass});
+try {
+ for(const project of projects){
+  frame.src='/projects/'+project.id+'?gallery-test='+Date.now();
+  let detail;
+  for(let i=0;i<100;i++){detail=frame.contentDocument?.querySelector('project-detail');if(detail?.getAttribute('project-id')===project.id && detail.shadowRoot.querySelector('.gallery-image'))break;await sleep(100);}
+  await sleep(300);
+  const win=frame.contentWindow,doc=win.document,root=detail.shadowRoot,gallery=root.querySelector('.gallery'),image=root.querySelector('.gallery-image');
+  const buttons=[...root.querySelectorAll('.gallery-thumbnail')],next=root.querySelector('[data-gallery-step="1"]'),prev=root.querySelector('[data-gallery-step="-1"]');
+  const verify=index=>{
+   const item=project.gallery[index];
+   check(project.id+' image '+index,image.getAttribute('src')===item.src && image.alt===item.alt && image.dataset.layout===item.layout);
+   check(project.id+' caption '+index,root.querySelector('.gallery-caption.is-active').textContent===item.caption);
+   check(project.id+' pressed '+index,buttons.filter(b=>b.getAttribute('aria-pressed')==='true').length===1 && buttons[index].getAttribute('aria-pressed')==='true');
+   check(project.id+' count '+index,root.querySelector('.gallery-counter').textContent===`${index+1} / ${buttons.length}`);
+   for(const dimension of ['width','height'])check(project.id+' '+dimension+' '+index,item[dimension]?image.getAttribute(dimension)===String(item[dimension]):!image.hasAttribute(dimension));
+  };
+  verify(0);
+  for(const width of [320,375,768,1440]){
+   frame.style.width=width+'px';await sleep(150);gallery.scrollIntoView({behavior:'instant'});await sleep(100);
+   const height=gallery.getBoundingClientRect().height;
+   for(let i=0;i<buttons.length;i++){buttons[i].click();await image.decode();verify(i);check(project.id+' image decoded '+i,image.naturalWidth>0);check(project.id+' stable '+width,Math.abs(gallery.getBoundingClientRect().height-height)<1);}
+   check(project.id+' overflow '+width,doc.documentElement.scrollWidth<=win.innerWidth);
+   check(project.id+' contain '+width,win.getComputedStyle(image).objectFit==='contain' && image.getBoundingClientRect().height<=560);
+  }
+  if(buttons.length>1){
+   buttons[buttons.length-1].click();next.click();verify(0);prev.click();verify(buttons.length-1);
+   gallery.focus();for(const [key,index] of [['ArrowRight',0],['End',buttons.length-1],['Home',0],['ArrowLeft',buttons.length-1],['ArrowDown',0]]){
+    gallery.dispatchEvent(new win.KeyboardEvent('keydown',{key,bubbles:true,cancelable:true}));verify(index);
+   }
+   buttons[0].focus();buttons[0].dispatchEvent(new win.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
+   check(project.id+' thumbnail focus',root.activeElement===buttons[1]);verify(1);
+   await sleep(500);verify(1);
+  }else{
+   check(project.id+' single image hides controls',['.gallery-thumbnails','.gallery-controls'].every(selector=>win.getComputedStyle(root.querySelector(selector)).display==='none'));
+  }
+  detail.remove();const before=image.getAttribute('src');next.click();check(project.id+' detached listeners removed',image.getAttribute('src')===before);
+ }
+}catch(error){results.push({name:'exception',pass:false,detail:error.stack});}
+document.querySelector('#results').textContent=JSON.stringify({checks:results.length,failures:results.filter(result=>!result.pass)});
+</script></body></html>

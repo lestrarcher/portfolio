@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="none" stroke="#C5A475" stroke-width="1">
+  <circle cx="320" cy="320" r="274" stroke-dasharray="610 150 230 732" transform="rotate(-32 320 320)"/>
+  <circle cx="320" cy="320" r="246" stroke-dasharray="170 270 480 626" transform="rotate(24 320 320)"/>
+  <circle cx="320" cy="320" r="218" stroke-dasharray="130 320 90 830" transform="rotate(-70 320 320)"/>
+  <path d="M320 30v25m0 530v25M30 320h25m530 0h25M108 108l15 15m394 394 15 15"/>
+  <path d="M412 54h35m-17-17v34M83 456h18m-9-9v18" stroke-width=".75"/>
+</svg>

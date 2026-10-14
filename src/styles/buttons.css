@@ -1,0 +1,114 @@
+/* Blood Button — Édition Prestige */
+
+.blood-btn {
+    --blood: #542630;
+    --blood-dark: #351b23;
+    --gold: #c5a475;
+
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .7rem;
+
+    max-width: 100%;
+    min-height: 2.8rem;
+    padding: .75rem 1.4rem;
+
+    color: #f1e9df;
+    background:
+        linear-gradient(145deg,
+            rgba(255, 255, 255, .065),
+            transparent 45%),
+        linear-gradient(180deg,
+            var(--blood),
+            var(--blood-dark));
+
+    border: 1px solid rgba(197, 164, 117, .55);
+    border-radius: 2px;
+
+    font: 500 .82rem/1.3 var(--font-body);
+    letter-spacing: .025em;
+    text-decoration: none;
+    text-align: center;
+
+    box-shadow:
+        inset 0 0 0 3px rgba(31, 18, 22, .85),
+        inset 0 0 0 4px rgba(197, 164, 117, .22),
+        0 4px 14px rgba(0, 0, 0, .12);
+
+    cursor: pointer;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background-color .25s ease;
+}
+
+/* Petit ornement en losange */
+.blood-btn::before {
+    content: "✦";
+    color: var(--gold);
+    font-size: .65rem;
+    line-height: 1;
+    opacity: .85;
+    transition: transform .25s ease;
+}
+
+/* Reflet subtil */
+.blood-btn::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    z-index: -1;
+    pointer-events: none;
+
+    background: linear-gradient(110deg,
+            transparent 25%,
+            rgba(255, 230, 190, .075) 50%,
+            transparent 75%);
+
+    opacity: 0;
+    transition: opacity .25s ease;
+}
+
+.blood-btn:hover,
+.blood-btn:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--gold);
+
+    box-shadow:
+        inset 0 0 0 3px rgba(31, 18, 22, .85),
+        inset 0 0 0 4px rgba(197, 164, 117, .4),
+        0 7px 20px rgba(75, 25, 36, .3);
+}
+
+.blood-btn:hover::before,
+.blood-btn:focus-visible::before {
+    transform: rotate(45deg);
+}
+
+.blood-btn:hover::after,
+.blood-btn:focus-visible::after {
+    opacity: 1;
+}
+
+.blood-btn:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+}
+
+.blood-btn:active {
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .blood-btn,
+    .blood-btn::before,
+    .blood-btn::after {
+        transition: none;
+    }
+}

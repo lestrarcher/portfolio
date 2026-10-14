@@ -1,0 +1,50 @@
+ :host {
+     display: block;
+     min-width: 0;
+     color: var(--color-text, #e9e3dc);
+     font-family: var(--font-body, system-ui, sans-serif)
+ }
+
+ .tech-card {
+     box-sizing: border-box;
+     display: flex;
+     align-items: center;
+     gap: .8rem;
+     min-height: 2.85rem;
+     padding: .48rem .55rem;
+     border: 1px solid transparent;
+     border-radius: 2px;
+     transition: border-color .2s, background .2s
+ }
+
+ .tech-card:hover {
+     border-color: rgba(197, 164, 117, .34);
+     background: rgba(197, 164, 117, .06)
+ }
+
+ .tech-card img {
+     display: block;
+     flex: 0 0 1.25rem;
+     width: 1.25rem;
+     height: 1.25rem;
+     object-fit: contain
+ }
+
+ .tech-card__fallback {
+     display: inline-grid;
+     place-items: center;
+     flex: 0 0 1.25rem;
+     color: #c5a475
+ }
+
+ .tech-card__name {
+     font-size: .86rem;
+     line-height: 1.4;
+     overflow-wrap: anywhere
+ }
+
+ @media(prefers-reduced-motion:reduce) {
+     .tech-card {
+         transition: none
+     }
+ }

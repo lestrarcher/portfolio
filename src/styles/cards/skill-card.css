@@ -1,0 +1,171 @@
+:host {
+    display: block;
+    min-width: 0;
+    height: 100%;
+    color: var(--color-text)
+}
+
+:host * {
+    box-sizing: border-box
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 158px;
+    height: 100%;
+    padding: 1rem .6rem .85rem;
+    text-align: center;
+    border: 1px solid var(--color-border, #423239);
+    border-radius: 7px;
+    background: var(--color-surface, #211e21);
+    box-shadow: inset 0 1px 0 #c5a47513;
+    transition: border-color .2s ease, transform .2s ease
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold, #c5a475), transparent);
+    opacity: .5
+}
+
+.card-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    margin-bottom: .8rem;
+    color: var(--color-gold, #c5a475)
+}
+
+.card-icon {
+    display: inline-flex;
+    width: 21px;
+    height: 21px
+}
+
+.card-icon svg {
+    width: 100%;
+    height: 100%
+}
+
+.card-code {
+    font: 600 .78rem/1 var(--font-display, Georgia, serif);
+    letter-spacing: .13em
+}
+
+.card-body {
+    width: 100%
+}
+
+.card-body__skill {
+    margin: 0 auto .6rem;
+    padding: .55rem .2rem;
+    min-height: 2.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--color-gold, #c5a475) 36%, transparent);
+    border-radius: 5px;
+    font: 600 clamp(.82rem, 1.2vw, 1rem)/1.2 var(--font-body, Arial, sans-serif);
+    color: var(--color-text);
+    overflow-wrap: anywhere
+}
+
+.card-body__description {
+    margin: 0;
+    color: var(--color-muted, #a99a99);
+    font: .75rem/1.4 var(--font-body, Arial, sans-serif)
+}
+
+@media(hover:hover) {
+    .card:hover {
+        border-color: var(--color-gold, #c5a475);
+        transform: translateY(-2px)
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .card {
+        transition: none
+    }
+
+    .card:hover {
+        transform: none
+    }
+}
+
+/* Édition prestige : écusson, gravure, cartouche. */
+.card {
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 180px;
+    padding: 1.05rem .75rem .9rem;
+    border-radius: 3px;
+    border-color: color-mix(in srgb, var(--color-gold, #c5a475) 32%, var(--color-border));
+    background: radial-gradient(ellipse 75% 75% at 50% 0%, color-mix(in srgb, var(--color-gold, #c5a475) 7%, transparent), transparent 85%), var(--color-surface, #211e21);
+    box-shadow: inset 0 0 0 3px var(--color-surface, #211e21), inset 0 0 0 4px color-mix(in srgb, var(--color-gold, #c5a475) 15%, transparent)
+}
+
+.card::before {
+    top: 8px;
+    left: 12px;
+    right: 12px;
+    height: 1px;
+    opacity: .5
+}
+
+.card::after {
+    content: '✦';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font: 10px Georgia, serif;
+    color: var(--color-gold, #c5a475);
+    opacity: .6
+}
+
+.card-top {
+    position: relative;
+    gap: .55rem;
+    min-width: 104px;
+    margin-bottom: .85rem;
+    padding: .55rem .9rem .65rem;
+    clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%);
+    background: color-mix(in srgb, var(--color-gold, #c5a475) 13%, var(--color-surface, #211e21));
+    border-top: 1px solid color-mix(in srgb, var(--color-gold, #c5a475) 65%, transparent);
+    color: var(--color-gold, #c5a475)
+}
+
+.card-code {
+    font-size: .88rem;
+    letter-spacing: .18em
+}
+
+.card-body__skill {
+    min-height: 3.05rem;
+    border-radius: 2px;
+    border-color: color-mix(in srgb, var(--color-gold, #c5a475) 48%, transparent);
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-gold, #c5a475) 7%, transparent), transparent);
+    font-weight: 650
+}
+
+.card-body__description {
+    padding-bottom: .65rem;
+    font-size: .76rem
+}
+
+@media (hover:hover) {
+    .card:hover {
+        box-shadow: inset 0 0 0 3px var(--color-surface, #211e21), inset 0 0 0 4px color-mix(in srgb, var(--color-gold, #c5a475) 40%, transparent), 0 8px 22px #0002
+    }
+}

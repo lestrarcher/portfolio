@@ -1,0 +1,51 @@
+:root {
+  color-scheme: dark;
+  --color-background: #171719;
+  --color-surface: #211e21;
+  --color-surface-raised: #292327;
+  --color-blood: #79232e;
+  --color-accent: #ad626b;
+  --color-text: #e9e3dc;
+  --color-muted: #a99a99;
+  --color-border: #423239;
+  --color-gold: #c5a475;
+  --header-bg: rgba(30, 27, 30, .96);
+  --hero-base: #181719;
+  --hero-ink: #79232e;
+  --button-primary: #63252f;
+  --button-primary-border: #96545f;
+  --font-body: 'Segoe UI', Arial, sans-serif;
+  --font-display: Georgia, 'Times New Roman', serif;
+  --content-width: 1280px;
+  --radius-card: 8px;
+  --section-space: clamp(4rem, 7vw, 7rem);
+  --transition: 220ms ease;
+  /* Static atmosphere: tune the Hero without changing its layout. */
+  --hero-glow-opacity: .48;
+  --arcane-opacity: .22;
+  --hero-grain-opacity: .09;
+  --section-grain-opacity: .055;
+}
+
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-background: #e9e1d5;
+  --color-surface: #f4ede3;
+  --color-surface-raised: #fff9f0;
+  --color-blood: #782e3b;
+  --color-accent: #843a47;
+  --color-text: #2e2428;
+  --color-muted: #675b5e;
+  --color-border: #cbb6a8;
+  --color-gold: #916a34;
+  --header-bg: rgba(248, 240, 230, .97);
+  --hero-base: #eee6db;
+  --hero-ink: #9d5b62;
+  --button-primary: #7e3645;
+  --button-primary-border: #7e3645;
+  --hero-glow-opacity: .26;
+  --arcane-opacity: .22;
+  --hero-grain-opacity: .07;
+  --section-grain-opacity: .04;
+}

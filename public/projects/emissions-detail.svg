@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#181719"/>
+  <g fill="none" stroke="#c5a475" opacity=".5">
+    <circle cx="600" cy="280" r="200" stroke-dasharray="800 456"/>
+    <path d="M180 210h120v150H180zM900 210h120v150H900zM540 200h120v170H540zM300 285h240m120 0h240"/>
+    <path d="M205 250h70m-70 30h70m-70 30h45M565 240h70m-70 30h70m-70 30h45M925 250h70m-70 30h70m-70 30h45"/>
+  </g>
+  <text x="600" y="455" text-anchor="middle" font-family="Georgia,serif" font-size="36" fill="#e9e3dc">eMissions</text>
+  <text x="600" y="520" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" fill="#c5a475">COMPOSITION CONCEPTUELLE — AUCUNE INTERFACE NI DONNÉE INTERNE</text>
+</svg>

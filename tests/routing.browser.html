@@ -1,0 +1,81 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><title>Tests du routage</title>
+<body style="margin:0"><iframe id="site" src="/" style="border:0;width:1440px;height:900px"></iframe><pre id="results">pending</pre>
+<script>
+const frame=document.querySelector('iframe'), results=[], errors=[];
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+function check(name,pass,detail=''){results.push({name,pass,detail});}
+async function ready(){
+ for(let i=0;i<100;i++){
+  if(frame.contentDocument?.querySelector('home-section')?.shadowRoot || frame.contentDocument?.querySelector('project-detail')?.shadowRoot){await sleep(250);return;}
+  await sleep(100);
+ }
+ throw Error('Application not ready');
+}
+(async()=>{
+ try {
+  await ready();
+  const win=frame.contentWindow,doc=win.document;
+  win.addEventListener('error',e=>errors.push(e.message));
+  win.addEventListener('unhandledrejection',e=>errors.push(String(e.reason)));
+  doc.documentElement.style.scrollBehavior='auto';
+  const home=doc.querySelector('home-section'),dice=home.shadowRoot.querySelector('arcane-dice');
+  const list=doc.querySelector('projects-list');
+  const cards=[...list.shadowRoot.querySelectorAll('project-card')];
+  check('three cards',cards.length===3);
+  for(const card of cards){
+   const id=card.getAttribute('project-id');
+   list.scrollIntoView();await sleep(150);const scroll=win.scrollY;
+   card.shadowRoot.querySelector(`a[href="/projects/${id}"]`).click();await sleep(250);
+   const detail=doc.querySelector('project-detail');
+   check('route '+id,win.location.pathname==='/projects/'+id && detail?.getAttribute('project-id')===id);
+   check('five sections '+id,['Contexte','Fonctionnalités','Choix techniques','Défis','Résultats'].every(title=>detail.shadowRoot.textContent.includes(title)));
+   check('missing facts explicit '+id,detail.shadowRoot.textContent.includes('À compléter.'));
+   check('quest detached '+id,!doc.querySelector('quest-progress'));
+   check('heading focused '+id,detail.shadowRoot.activeElement?.tagName==='H1');
+   const imgs=[...detail.shadowRoot.querySelectorAll('img')];
+   check('gallery '+id,imgs.length>0 && imgs.every(img=>img.getAttribute('src').startsWith('/projects/')));
+   if(id==='emissions')check('concept only',imgs.every(img=>img.src.endsWith('.svg')));
+   win.history.back();await sleep(350);
+   check('history back '+id,win.location.pathname==='/' && doc.querySelector('home-section')===home && Math.abs(win.scrollY-scroll)<5);
+   check('d20 instance preserved '+id,home.shadowRoot.querySelector('arcane-dice')===dice);
+   win.history.forward();await sleep(250);
+   check('history forward '+id,doc.querySelector('project-detail')?.getAttribute('project-id')===id);
+   doc.querySelector('project-detail').shadowRoot.querySelector('.back-link').click();await sleep(300);
+   check('home anchor '+id,win.location.pathname==='/' && win.location.hash==='#projects' && doc.querySelector('quest-progress').activeId==='projects');
+  }
+  cards[0].shadowRoot.querySelector('a[href="/projects/jdr-companion"]').click();await sleep(250);
+  for(const width of [1440,768,375,320]){
+   frame.style.width=width+'px';await sleep(100);
+   check('detail overflow '+width,doc.documentElement.scrollWidth<=win.innerWidth);
+   const header=doc.querySelector('site-header'),root=header.shadowRoot,button=root.querySelector('button'),nav=root.querySelector('nav');
+   if(width<=900){
+    check('closed menu '+width,win.getComputedStyle(nav).display==='none' && button.getAttribute('aria-expanded')==='false');
+    button.focus();button.click();
+    check('open menu '+width,button.getAttribute('aria-expanded')==='true' && win.getComputedStyle(nav).display!=='none');
+    button.dispatchEvent(new win.KeyboardEvent('keydown',{key:'Escape',bubbles:true,composed:true}));
+    check('escape restores focus '+width,button.getAttribute('aria-expanded')==='false' && root.activeElement===button);
+    button.click();doc.body.dispatchEvent(new win.PointerEvent('pointerdown',{bubbles:true}));
+    check('outside closes '+width,button.getAttribute('aria-expanded')==='false');
+   }
+  }
+  const header=doc.querySelector('site-header'),root=header.shadowRoot;
+  root.querySelector('button').click();root.querySelector('a[href="/#skills"]').click();await sleep(300);
+  check('mobile selection to home',win.location.pathname==='/' && win.location.hash==='#skills' && doc.querySelector('quest-progress').activeId==='skills');
+  check('grimoire retained',doc.getElementById('skills').shadowRoot.querySelector('[data-reveal="chapter"]').classList.contains('is-revealed'));
+  check('all cards visible on mobile',cards.every(card=>win.getComputedStyle(card).display!=='none'));
+  check('home overflow',doc.documentElement.scrollWidth<=win.innerWidth);
+  const dead=doc.createElement('a');dead.href='/projects/inexistant';doc.body.append(dead);dead.click();await sleep(250);
+  check('not found',doc.querySelector('project-detail').shadowRoot.textContent.includes('Page introuvable'));
+  doc.querySelector('project-detail').shadowRoot.querySelector('a').click();await sleep(250);
+  check('404 return',win.location.pathname==='/');
+  check('runtime errors',errors.length===0,errors.join(', '));
+  for(const id of ['jdr-companion','campaign-planner','emissions','inexistant']){
+   frame.src='/projects/'+id+'?direct-test='+Date.now();await sleep(200);await ready();
+   const detail=frame.contentDocument.querySelector('project-detail');
+   check('direct load '+id,id==='inexistant'?detail.shadowRoot.textContent.includes('Page introuvable'):detail.getAttribute('project-id')===id);
+   check('direct load no overflow '+id,frame.contentDocument.documentElement.scrollWidth<=frame.contentWindow.innerWidth);
+  }
+ }catch(error){check('exception',false,error.stack);}
+ document.querySelector('#results').textContent=JSON.stringify(results,null,2);
+})();
+</script></body></html>
