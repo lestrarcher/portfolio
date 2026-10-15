@@ -33,7 +33,6 @@ class Projects extends HTMLElement {
             <section id="projects">
                 <header class="projects-header section-heading" data-reveal="chapter">
                     <div class="projects-header__category">
-                        <img src="https://campaign-planner.alwaysdata.net/images/logo.png"  class="projects-header__category-img" />
                         <div class="projects-header__category-id">
                             <p class="projects-header__category-id__name section-heading__eyebrow">Journal de quêtes</p>
                             <h2 class="projects-header__category-id__subname section-heading__title">Mes projets</h2>

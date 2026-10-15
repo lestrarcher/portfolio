@@ -1,12 +1,12 @@
 import { projects } from './data/projects.js';
 import './components/project-detail.js';
+import { updatePageMetadata } from './utils/page-metadata.js';
 
 // The existing home nodes are kept, so returning home preserves component state.
 export function initRouter() {
     const main = document.querySelector('main');
     const home = document.createDocumentFragment();
     const quest = document.querySelector('quest-progress');
-    const homeTitle = document.title;
     let currentPath = '/';
     let handledURL = '';
     let navigation = 0;
@@ -48,16 +48,15 @@ export function initRouter() {
             if (path === '/') {
                 main.append(home);
                 document.body.append(quest);
-                document.title = homeTitle;
             } else {
                 const project = projects.find(item => path === `/projects/${item.id}`);
                 const detail = document.createElement('project-detail');
                 if (project) detail.setAttribute('project-id', project.id);
                 main.append(document.createElement('site-header'), detail);
-                document.title = project ? `${project.title} | Portfolio` : 'Page introuvable | Portfolio';
             }
             currentPath = path;
         }
+        updatePageMetadata(projects.find(item => path === `/projects/${item.id}`), path);
         // Give reconnected Shadow Roots a layout before restoring the scroll position.
         await nextFrame();
         await nextFrame();

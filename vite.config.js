@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite';
 import { readFileSync } from 'node:fs';
+import { seoPages } from './scripts/seo-pages.js';
 
 export default defineConfig({
-    plugins: [{
+    plugins: [seoPages(), {
         // Preserve the autonomous d20's existing stylesheet URL in production.
         name: 'preserve-dice-stylesheet',
         generateBundle() {

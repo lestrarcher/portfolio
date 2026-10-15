@@ -42,7 +42,7 @@ class ProjectDetail extends HTMLElement {
                     <figure>
                         <div class="gallery-presentation">
                             <button type="button" class="gallery-stage" aria-haspopup="dialog">
-                                <img class="gallery-image" decoding="async">
+                                <img class="gallery-image" alt="${project.gallery[0].alt}" decoding="async">
                                 <span class="gallery-status" role="status"></span>
                             </button>
                         </div>
