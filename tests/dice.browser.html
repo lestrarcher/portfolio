@@ -7,13 +7,26 @@ const random = Math.random;
 let dice;
 async function finish() {
   for (let i=0;i<100 && dice.rolling;i++) await sleep(50);
-  check('animation completes', !dice.rolling && !dice.button.disabled && !dice.stage.classList.contains('rolling'));
+  check('animation completes', !dice.rolling && dice.button.disabled && !dice.stage.classList.contains('rolling'));
+}
+async function pause() {
+  const orientation = JSON.stringify(dice.orientation), message = dice.result.textContent;
+  dice.roll();
+  check('pause rejects roll', JSON.stringify(dice.orientation) === orientation && dice.result.textContent === message && !dice.rolling);
+  await sleep(2700);
+  check('three second hold', dice.button.disabled && JSON.stringify(dice.orientation) === orientation);
+  for (let i=0;i<30 && dice.button.disabled;i++) await sleep(50);
+  check('button restored', !dice.button.disabled && dice.button.textContent.includes('Lancer le dé'));
+  await sleep(150);
+  check('result remains still', JSON.stringify(dice.orientation) === orientation && dice.result.textContent === message);
 }
 try {
   dice = document.createElement('arcane-dice'); document.body.append(dice);
   dice.motion = {matches:false};
   Math.random = () => 0;
   const initial = [...dice.orientation];
+  await sleep(100);
+  check('idle rotation before first roll', dice.orientation.some((value, i) => value !== initial[i]));
   dice.button.click();
   check('animation starts', dice.rolling && dice.button.disabled && dice.duration === 2300);
   check('intermediate message preserved', dice.result.textContent === 'Le destin est en marche…');
@@ -24,19 +37,30 @@ try {
   await finish();
   check('first natural 20', dice.visibleNumber === 20 && dice.result.classList.contains('critical'));
   // A controlled random source verifies the original mapping, rather than relying on luck.
-  dice.button.click(); await finish();
+  await pause();
+  const previous = [...dice.orientation];
+  dice.button.click(); check('starts from retained orientation', JSON.stringify(dice.startQ) === JSON.stringify(previous)); await finish();
   check('second uses random lower bound', dice.visibleNumber === 1 && !dice.result.classList.contains('critical'));
+  await pause();
   dice.motion = {matches:true};
   Math.random = () => .5; dice.button.click();
   check('subsequent random middle', dice.visibleNumber === 11 && !dice.rolling);
+  await pause();
   Math.random = () => .99999; dice.button.click();
   check('subsequent random upper bound', dice.visibleNumber === 20);
-  dice.remove(); document.body.append(dice);
+  dice.remove(); await sleep(150); document.body.append(dice);
+  check('reconnection preserves pause', dice.button.disabled);
+  await pause();
   Math.random = () => .25; dice.button.click();
   check('reconnection retains counter', dice.visibleNumber === 6);
   dice.remove(); dice = document.createElement('arcane-dice'); document.body.append(dice);
   dice.motion = {matches:true}; dice.button.click();
   check('new instance starts at 20 with reduced motion', dice.visibleNumber === 20 && !dice.rolling);
+  check('final face orientation', JSON.stringify(dice.orientation) === JSON.stringify(dice.targetQ));
+  dice.remove(); await sleep(3100);
+  check('detached timer cancelled', dice.button.disabled && dice.frame === null);
+  document.body.append(dice);
+  check('expired pause on return', !dice.button.disabled && !dice.rolling && dice.visibleNumber === 20);
 } catch(error) { results.push({name:'exception',pass:false,detail:error.stack}); }
 finally { Math.random = random; dice?.remove(); }
 document.querySelector('#results').textContent = JSON.stringify({checks:results.length,failures:results.filter(result => !result.pass)});

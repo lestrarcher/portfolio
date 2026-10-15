@@ -39,6 +39,8 @@ export function seoPages() {
             }
         },
         transformIndexHtml(html, context) {
+            // Standalone browser test pages are not application entry documents.
+            if (!html.includes('<!-- seo:start -->')) return html;
             const path = (context.path || '/').replace(/\/$/, '') || '/';
             return withMetadata(html, getPageMetadata(byPath.get(path), path === '/index.html' ? '/' : path));
         },

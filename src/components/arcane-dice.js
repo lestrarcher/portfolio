@@ -29,6 +29,8 @@ const NORMALS = FACES.map(faceNormal);
 
 class ArcaneDice extends HTMLElement {
     #rollCount = 0;
+    #resultUntil = 0;
+    #resultTimer = null;
 
     constructor() {
         super(); this.attachShadow({ mode: 'open' });
@@ -48,8 +50,34 @@ class ArcaneDice extends HTMLElement {
         this.onClick = () => this.roll();
         this.motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     }
-    connectedCallback() { this.button.addEventListener('click', this.onClick); this.lastTime = null; this.tick(performance.now()); }
-    disconnectedCallback() { this.button.removeEventListener('click', this.onClick); cancelAnimationFrame(this.frame); this.frame = null; }
+    connectedCallback() {
+        this.button.addEventListener('click', this.onClick);
+        if (!this.rolling) this.resumeResultPause();
+        this.lastTime = null;
+        this.tick(performance.now());
+    }
+    disconnectedCallback() {
+        this.button.removeEventListener('click', this.onClick);
+        cancelAnimationFrame(this.frame); this.frame = null;
+        clearTimeout(this.#resultTimer); this.#resultTimer = null;
+    }
+    resumeResultPause() {
+        clearTimeout(this.#resultTimer);
+        this.#resultTimer = null;
+        const remaining = this.#resultUntil - performance.now();
+        this.button.disabled = remaining > 0;
+        if (remaining > 0) {
+            this.#resultTimer = setTimeout(() => this.resumeResultPause(), remaining);
+        }
+    }
+    finishRoll() {
+        this.orientation = this.targetQ;
+        this.rolling = false;
+        this.stage.classList.remove('rolling');
+        this.showResult();
+        this.#resultUntil = performance.now() + 3000;
+        this.resumeResultPause();
+    }
     tick(now) {
         if (!this.isConnected) return;
         const dt = Math.min(50, now - (this.lastTime ?? now)); this.lastTime = now;
@@ -60,14 +88,14 @@ class ArcaneDice extends HTMLElement {
             // Rotations supplémentaires qui reviennent exactement à zéro à l'arrivée.
             const spin = mul(axisAngle([0, 1, 0], Math.PI * 2 * 5 * ease), axisAngle([1, 0, 0], Math.PI * 2 * 4 * ease));
             this.orientation = mul(spin, base);
-            if (t >= 1) { this.orientation = this.targetQ; this.rolling = false; this.stage.classList.remove('rolling'); this.button.disabled = false; this.showResult(); }
-        } else if (!this.motion.matches) {
+            if (t >= 1) this.finishRoll();
+        } else if (this.#rollCount === 0 && !this.motion.matches) {
             this.orientation = mul(axisAngle([0, 1, 0], dt * .00019), this.orientation);
         }
         this.draw(); this.frame = requestAnimationFrame(t => this.tick(t));
     }
     roll() {
-        if (this.rolling) return;
+        if (!this.isConnected || this.rolling || this.button.disabled) return;
         this.visibleNumber = this.#rollCount === 0 ? 20 : Math.floor(Math.random() * 20) + 1;
         this.#rollCount++;
         const normal = NORMALS[this.visibleNumber - 1];
@@ -76,7 +104,7 @@ class ArcaneDice extends HTMLElement {
         this.duration = this.motion.matches ? 0 : 2300;
         this.startTime = performance.now(); this.rolling = true; this.button.disabled = true;
         this.stage.classList.add('rolling'); this.result.textContent = 'Le destin est en marche…';
-        if (this.motion.matches) { this.orientation = this.targetQ; this.rolling = false; this.button.disabled = false; this.stage.classList.remove('rolling'); this.showResult(); this.draw(); }
+        if (this.motion.matches) { this.finishRoll(); this.draw(); }
     }
     showResult() {
         const n = this.visibleNumber;
