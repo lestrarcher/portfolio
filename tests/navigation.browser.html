@@ -1,0 +1,55 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><title>Navigation commune</title>
+<body><iframe src="/" style="width:1440px;height:900px"></iframe><pre id="results">pending</pre>
+<script type="module">
+import { navigationSections } from '/src/data/navigation.js';
+const frame = document.querySelector('iframe'), results = [];
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const check = (name, pass) => results.push({name, pass});
+async function ready() {
+  for (let i=0;i<100;i++) {
+    if (frame.contentDocument?.querySelector('quest-progress')?.sections?.length) { await sleep(300); return; }
+    await sleep(100);
+  }
+  throw new Error('Navigation not ready');
+}
+try {
+  await ready();
+  const win = frame.contentWindow, doc = win.document;
+  doc.documentElement.style.scrollBehavior = 'auto';
+  const quest = doc.querySelector('quest-progress');
+  const header = doc.querySelector('home-section').shadowRoot.querySelector('site-header');
+  const links = [...header.shadowRoot.querySelectorAll('nav a')];
+  const markers = [...quest.shadowRoot.querySelectorAll('[data-id]')];
+  const ids = navigationSections.map(section => section.id);
+  check('editorial order', ids.join(',') === 'home,about-me,projects,skills,career,contact');
+  const roots = root => [root, ...[...root.querySelectorAll('*')].filter(node => node.shadowRoot).flatMap(node => roots(node.shadowRoot))];
+  check('one main heading', roots(doc).flatMap(root => [...root.querySelectorAll('h1')]).length === 1);
+  for (const id of ids.slice(1)) {
+    const root = doc.getElementById(id).shadowRoot;
+    check('editorial heading '+id, ['.section-heading__eyebrow','h2.section-heading__title','.section-heading__description'].every(selector => root.querySelector(selector)?.textContent.trim()));
+  }
+  check('six real sections', ids.length === 6 && ids.every(id => doc.getElementById(id)));
+  check('header order', JSON.stringify(links.map(link => link.hash.slice(1))) === JSON.stringify(ids));
+  check('quest order', JSON.stringify(markers.map(link => link.dataset.id)) === JSON.stringify(ids));
+  check('matching labels', links.every((link,i) => link.textContent === navigationSections[i].label && markers[i].getAttribute('aria-label') === link.textContent));
+  check('document order', JSON.stringify([...doc.querySelector('main').children].map(node => node.id)) === JSON.stringify(ids));
+  for (const width of [1440,768,375,320]) {
+    frame.style.width = width+'px'; await sleep(100);
+    for (const i of [0,1,2,3,4,5,4,3,2,1,0]) {
+      markers[i].click(); await sleep(100);
+      check('active '+width+' '+i, quest.activeId === ids[i] && markers[i].getAttribute('aria-current') === 'location');
+      check('counter '+width+' '+i, quest.shadowRoot.querySelector('.quest-progress__counter').textContent === `${String(i+1).padStart(2,'0')} / 06`);
+    }
+    check('overflow '+width, doc.documentElement.scrollWidth <= win.innerWidth);
+    check('compact section spacing '+width, ids.slice(1).every(id => parseFloat(win.getComputedStyle(doc.getElementById(id)).paddingTop) <= 48));
+  }
+  doc.querySelector('projects-list').shadowRoot.querySelector('project-card').shadowRoot.querySelector('a[href^="/projects/"]').click(); await sleep(200);
+  doc.querySelector('site-header').shadowRoot.querySelector('a[href="/#career"]').click(); await sleep(200);
+  check('career from project', win.location.hash === '#career' && quest.activeId === 'career');
+  for (const id of ['career','about-me','projects','contact']) {
+    await new Promise(resolve => { frame.onload = resolve; frame.src = '/?navigation-test='+id+'#'+id; }); await ready();
+    check('direct anchor '+id, frame.contentDocument.querySelector('quest-progress').activeId === id);
+  }
+} catch(error) { results.push({name:'exception',pass:false,detail:error.stack}); }
+document.querySelector('#results').textContent = JSON.stringify({checks:results.length,failures:results.filter(result => !result.pass)});
+</script></body></html>

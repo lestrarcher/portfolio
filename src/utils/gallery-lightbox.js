@@ -21,6 +21,7 @@ export function createGalleryLightbox(root, onStep) {
         </div>
         <div class="lightbox-viewport" tabindex="0" role="region" aria-label="Image agrandie, zone défilante">
             <div class="lightbox-canvas"><img draggable="false" alt=""></div>
+            <span class="lightbox-status" role="status"></span>
         </div>
         <p class="lightbox-caption" aria-live="polite"></p>
     </div>`;
@@ -30,6 +31,14 @@ export function createGalleryLightbox(root, onStep) {
     const viewport = dialog.querySelector('.lightbox-viewport');
     const canvas = dialog.querySelector('.lightbox-canvas');
     const image = dialog.querySelector('img');
+    const status = dialog.querySelector('.lightbox-status');
+    let ready = false;
+    function imageState(state) {
+        ready = state === 'ready';
+        image.style.visibility = ready ? '' : 'hidden';
+        status.textContent = state === 'error' ? 'Image indisponible' : state === 'loading' ? 'Chargement…' : '';
+        dialog.querySelectorAll('[data-zoom], [data-reset]').forEach(button => { button.disabled = !ready; });
+    }
     let item, zoom = 1, opener, lock, drag;
 
     function fit(recenter = false) {
@@ -45,8 +54,8 @@ export function createGalleryLightbox(root, onStep) {
         viewport.scrollLeft = recenter ? 0 : x * canvas.offsetWidth - viewport.clientWidth / 2;
         viewport.scrollTop = recenter ? 0 : y * canvas.offsetHeight - viewport.clientHeight / 2;
         dialog.querySelector('[data-reset]').textContent = `${Math.round(zoom * 100)} %`;
-        dialog.querySelector('[data-zoom="-0.5"]').disabled = zoom === 1;
-        dialog.querySelector('[data-zoom="0.5"]').disabled = zoom === 4;
+        dialog.querySelector('[data-zoom="-0.5"]').disabled = !ready || zoom === 1;
+        dialog.querySelector('[data-zoom="0.5"]').disabled = !ready || zoom === 4;
         viewport.classList.toggle('is-zoomed', zoom > 1);
     }
 
@@ -63,14 +72,17 @@ export function createGalleryLightbox(root, onStep) {
     function sync(nextItem, index, count) {
         item = nextItem;
         zoom = 1;
+        imageState('loading');
         image.src = item.src;
+        if (image.complete && image.naturalWidth) imageState('ready');
         image.alt = item.alt;
         dialog.querySelector('.lightbox-caption').textContent = item.caption;
         dialog.querySelector('.lightbox-counter').textContent = `${index + 1} / ${count}`;
         dialog.querySelector('.lightbox-navigation').hidden = count < 2;
         fit(true);
     }
-    image.addEventListener('load', () => fit(true), options);
+    image.addEventListener('load', () => { imageState('ready'); fit(true); }, options);
+    image.addEventListener('error', () => imageState('error'), options);
     const resize = new ResizeObserver(() => fit());
     resize.observe(viewport);
     dialog.addEventListener('cancel', event => { event.preventDefault(); close(); }, options);

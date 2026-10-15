@@ -1,4 +1,5 @@
 import headerStyles from '../styles/site-header.css?inline';
+import { navigationSections } from '../data/navigation.js';
 
 class SiteHeader extends HTMLElement {
 
@@ -35,19 +36,17 @@ class SiteHeader extends HTMLElement {
             });
         }, options);
         const themeButton = this.shadowRoot.querySelector('.theme-toggle');
-        const setTheme = (theme) => {
-            document.documentElement.dataset.theme = theme;
+        const updateThemeButton = () => {
+            const theme = document.documentElement.dataset.theme;
+
             themeButton.setAttribute('aria-label', theme === 'dark' ? 'Activer le thème clair' : 'Activer le thème sombre');
             themeButton.setAttribute('aria-pressed', String(theme === 'light'));
             themeButton.querySelector('.theme-toggle__label').textContent = theme === 'dark' ? 'Clair' : 'Sombre';
         };
-        let savedTheme = null;
-        try { savedTheme = localStorage.getItem('portfolio-theme'); } catch (_) {}
-        setTheme(savedTheme === 'light' ? 'light' : 'dark');
+        updateThemeButton();
+        window.addEventListener('portfolio-theme-change', updateThemeButton, options);
         themeButton.addEventListener('click', () => {
-            const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
-            setTheme(next);
-            try { localStorage.setItem('portfolio-theme', next); } catch (_) {}
+            window.portfolioTheme.set(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
         }, options);
         this.mobile = matchMedia('(max-width: 900px)');
         this.mobile.addEventListener('change', () => {
@@ -71,10 +70,10 @@ class SiteHeader extends HTMLElement {
             <style>${headerStyles}</style>
             <header>
                 <div class="header-site">
-                    <img src="https://campaign-planner.alwaysdata.net/images/logo.png"  class="header-site__img" />
+                    <span class="header-site__monogram" aria-hidden="true">MK</span>
                     <div class="header-site__id">
-                        <h1 class="header-site__id-name">Mickael KERN</h1>
-                        <h2 class="header-site__id-class">Développeur Full-Stack</h2>
+                        <p class="header-site__id-name">Mickael KERN</p>
+                        <p class="header-site__id-class">Développeur Full-Stack</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -88,12 +87,9 @@ class SiteHeader extends HTMLElement {
                 </div>
                 <nav class="header-nav" id="header-navigation" aria-label="Navigation principale">
                     <ul class="header-nav__list">
-                        <li class="header-nav__list-item"><a href="/#home">Accueil</a></li>
-                        <li class="header-nav__list-item"><a href="/#about-me">A propos</a></li>
-                        <li class="header-nav__list-item"><a href="/#skills">Compétences</a></li>
-                        <li class="header-nav__list-item"><a href="/#projects">Projets</a></li>
-                        <li class="header-nav__list-item"><a href="/#parcours">Quêtes</a></li>
-                        <li class="header-nav__list-item"><a href="/#contact">Contact</a></li>
+                        ${navigationSections.map(section => `
+                            <li class="header-nav__list-item"><a href="/#${section.id}">${section.label}</a></li>
+                        `).join('')}
                     </ul>
                 </nav>
             </header>

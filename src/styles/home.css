@@ -3,8 +3,8 @@
     position: relative;
     isolation: isolate;
     width: 100%;
-    padding: clamp(1rem, 2.5vw, 2.5rem) 0 clamp(3rem, 6vw, 6rem);
-    background: var(--hero-base, #181719);
+    padding: 0 0 clamp(3rem, 6vw, 6rem);
+    background: transparent;
     color: var(--color-text, #e9e3dc);
     font-family: var(--font-body, 'Segoe UI', Arial, sans-serif);
 }
@@ -15,32 +15,17 @@
     box-sizing: border-box;
 }
 
-:host::before,
-:host::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-}
 
-:host::before {
-    background: url('../assets/paper-grain.svg') repeat;
-    opacity: var(--hero-grain-opacity, .045);
-}
 
-:host::after {
-    background:
-        radial-gradient(ellipse 34% 44% at 77% 56%, #79232e 0%, #79232e55 38%, #79232e00 100%),
-        radial-gradient(ellipse 30% 36% at 24% 49%, #79232e55 0%, #79232e00 100%);
-    opacity: var(--hero-glow-opacity, .48);
-}
+
+
+
 
 #home {
     position: relative;
     isolation: isolate;
     width: min(100% - 6rem, 1280px);
-    margin: 0 auto;
+    margin: 1rem auto 0;
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     align-items: center;
@@ -115,7 +100,7 @@
     min-height: 46px;
     max-width: 100%;
     padding: .85rem 1.3rem;
-    border: 1px solid #c5a47588;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 53.33%, transparent);
     border-radius: 2px;
     color: var(--color-text, #e9e3dc);
     background: transparent;
@@ -133,8 +118,8 @@
 @media (hover: hover) and (pointer: fine) {
     .btn:hover {
         transform: translateY(-2px);
-        border-color: #c5a475;
-        background: #c5a4750d;
+        border-color: var(--color-gold);
+        background: color-mix(in srgb, var(--color-gold) 5.1%, transparent);
     }
 }
 
@@ -145,8 +130,8 @@
 
     :host::after {
         background:
-            radial-gradient(ellipse 65% 30% at 50% 76%, #79232e 0%, #79232e44 40%, #79232e00 100%),
-            radial-gradient(ellipse 70% 25% at 30% 35%, #79232e44 0%, #79232e00 100%);
+            radial-gradient(ellipse 65% 30% at 50% 76%, var(--color-blood) 0%, color-mix(in srgb, var(--color-blood) 26.67%, transparent) 40%, color-mix(in srgb, var(--color-blood) 0%, transparent) 100%),
+            radial-gradient(ellipse 70% 25% at 30% 35%, color-mix(in srgb, var(--color-blood) 26.67%, transparent) 0%, color-mix(in srgb, var(--color-blood) 0%, transparent) 100%);
     }
 
     #home::before {
@@ -193,166 +178,26 @@
     }
 }
 
-/* Light-mode support for the Hero without changing the dice. */
-:host-context([data-theme="light"]) .btn {
-    border-color: var(--color-gold);
-}
-
-:host-context([data-theme="light"]) .home-presentation__title {
-    color: var(--color-text);
-}
-
-/* Fine engraved rule below the hero. */
-:host::before {
-    background-size: 210px 210px;
-}
-
-/* Laboratoire visuel : trois ambiances, sans modifier le d20 ni le contenu. */
-.atmosphere-lab {
-    position: relative;
-    z-index: 5;
-    width: min(calc(100% - 3rem), 1280px);
-    margin: .75rem auto 1.25rem;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: .75rem;
-    font-size: .72rem;
-    letter-spacing: .05em;
-    color: var(--color-muted, #a99a99);
-}
-
-.atmosphere-lab select {
-    min-height: 38px;
-    max-width: 100%;
-    padding: .45rem 2rem .45rem .8rem;
-    border: 1px solid var(--color-border, #543238);
-    border-radius: 5px;
-    background: var(--color-surface, #211e21);
-    color: var(--color-text, #e9e3dc);
-    font: inherit;
-    cursor: pointer;
-}
-
-.atmosphere-lab select:focus-visible {
-    outline: 2px solid var(--color-gold, #c5a475);
-    outline-offset: 3px;
-}
-
-/* I — Grimoire : parchemin, enluminures fines et gravure. */
-:host([data-atmosphere="grimoire"]) {
-    background-image:
-        repeating-linear-gradient(112deg, transparent 0 32px, #c5a47506 33px, transparent 34px 92px),
-        radial-gradient(ellipse 50% 80% at 95% 30%, #70413326, transparent 70%),
-        linear-gradient(120deg, #29202235, transparent 55%);
-}
-
-:host([data-atmosphere="grimoire"])::before {
-    background-image: url('../assets/paper-grain.svg');
-    background-size: 145px;
-    opacity: .16;
-}
-
-:host([data-atmosphere="grimoire"]) #home::after {
+#home::after {
     content: '';
     position: absolute;
     inset: -1rem;
     z-index: -1;
     pointer-events: none;
-    border: 1px solid #c5a47520;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 12.55%, transparent);
     background:
-        linear-gradient(#c5a47588, #c5a47588) left top / 54px 1px no-repeat,
-        linear-gradient(#c5a47588, #c5a47588) left top / 1px 54px no-repeat,
-        linear-gradient(#c5a47588, #c5a47588) right bottom / 54px 1px no-repeat,
-        linear-gradient(#c5a47588, #c5a47588) right bottom / 1px 54px no-repeat;
-}
-
-/* II — Brumes : nappes de couleur et profondeur cinématographique. */
-:host([data-atmosphere="brumes"]) {
-    background-image:
-        radial-gradient(ellipse 60% 30% at 18% 72%, #8d3c4a55, transparent 80%),
-        radial-gradient(ellipse 54% 35% at 88% 30%, #60202e77, transparent 82%),
-        radial-gradient(ellipse 75% 23% at 53% 93%, #b48a7630, transparent 90%);
-}
-
-:host([data-atmosphere="brumes"])::before {
-    background:
-        radial-gradient(ellipse 46% 15% at 20% 45%, #e1a6ad22, transparent 95%),
-        radial-gradient(ellipse 52% 17% at 76% 67%, #bc818a26, transparent 95%),
-        url('../assets/paper-grain.svg') repeat;
-    opacity: .85;
-}
-
-:host([data-atmosphere="brumes"])::after {
-    background:
-        radial-gradient(ellipse 40% 40% at 80% 47%, #79232e, transparent 95%),
-        radial-gradient(ellipse 40% 30% at 18% 64%, #6d3345, transparent 95%);
-    opacity: .75;
-}
-
-/* III — Gothique : arches architecturales en fond, comme une nef abstraite. */
-:host([data-atmosphere="gothique"]) {
-    background-image:
-        linear-gradient(90deg, #08080955, transparent 26%, transparent 74%, #08080955),
-        radial-gradient(ellipse 60% 65% at 55% 35%, #622d3933, transparent 90%);
-}
-
-:host([data-atmosphere="gothique"])::before {
-    background-image: url('../assets/paper-grain.svg');
-    background-size: 185px;
-    opacity: .09;
-}
-
-:host([data-atmosphere="gothique"]) #home::after {
-    content: '';
-    position: absolute;
-    inset: -2rem -4vw;
-    z-index: -1;
-    pointer-events: none;
-    opacity: .42;
-    background:
-        radial-gradient(ellipse 25% 86% at 12% 100%, transparent 62%, #c5a47524 62.5%, #c5a47524 63%, transparent 63.5%) left bottom / 38% 100% no-repeat,
-        radial-gradient(ellipse 25% 86% at 88% 100%, transparent 62%, #c5a47524 62.5%, #c5a47524 63%, transparent 63.5%) right bottom / 38% 100% no-repeat,
-        repeating-linear-gradient(90deg, transparent 0 17%, #c5a4750b 17.1%, transparent 17.3% 33%);
-}
-
-:host([data-atmosphere="gothique"])::after {
-    background: radial-gradient(ellipse 43% 55% at 78% 56%, #79232e, transparent 100%);
-    opacity: .35;
-}
-
-@media (max-width: 650px) {
-    .atmosphere-lab {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    :host([data-atmosphere="gothique"]) #home::after {
-        inset: -1rem;
-    }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    :host([data-atmosphere="brumes"])::before {
-        animation: mist-drift 24s ease-in-out infinite alternate;
-    }
-}
-
-@keyframes mist-drift {
-    from {
-        transform: translate3d(-1.5%, 0, 0);
-    }
-
-    to {
-        transform: translate3d(1.5%, -1%, 0);
-    }
+        linear-gradient(color-mix(in srgb, var(--color-gold) 53.33%, transparent), color-mix(in srgb, var(--color-gold) 53.33%, transparent)) left top / 54px 1px no-repeat,
+        linear-gradient(color-mix(in srgb, var(--color-gold) 53.33%, transparent), color-mix(in srgb, var(--color-gold) 53.33%, transparent)) left top / 1px 54px no-repeat,
+        linear-gradient(color-mix(in srgb, var(--color-gold) 53.33%, transparent), color-mix(in srgb, var(--color-gold) 53.33%, transparent)) right bottom / 54px 1px no-repeat,
+        linear-gradient(color-mix(in srgb, var(--color-gold) 53.33%, transparent), color-mix(in srgb, var(--color-gold) 53.33%, transparent)) right bottom / 1px 54px no-repeat;
 }
 
 /* Blood Button — Édition Prestige */
 .blood-btn {
-    --blood: #542630;
-    --blood-dark: #351b23;
-    --gold: #c5a475;
+    --blood: var(--button-blood);
+    --blood-dark: var(--button-blood-dark);
+    --gold: var(--button-gold);
+    --color-gold: var(--button-gold);
     position: relative;
     isolation: isolate;
     display: inline-flex;
@@ -362,7 +207,7 @@
     max-width: 100%;
     min-height: 2.8rem;
     padding: .75rem 1.4rem;
-    color: #f1e9df;
+    color: var(--button-text);
     background:
         linear-gradient(145deg,
             rgba(255, 255, 255, .065),
@@ -370,7 +215,7 @@
         linear-gradient(180deg,
             var(--blood),
             var(--blood-dark));
-    border: 1px solid rgba(197, 164, 117, .55);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
     border-radius: 2px;
     font: 500 .82rem/1.3 var(--font-body);
     letter-spacing: .025em;
@@ -378,7 +223,7 @@
     text-align: center;
     box-shadow:
         inset 0 0 0 3px rgba(31, 18, 22, .85),
-        inset 0 0 0 4px rgba(197, 164, 117, .22),
+        inset 0 0 0 4px color-mix(in srgb, var(--color-gold) 22%, transparent),
         0 4px 14px rgba(0, 0, 0, .12);
     cursor: pointer;
     transition:
@@ -419,7 +264,7 @@
     border-color: var(--gold);
     box-shadow:
         inset 0 0 0 3px rgba(31, 18, 22, .85),
-        inset 0 0 0 4px rgba(197, 164, 117, .4),
+        inset 0 0 0 4px color-mix(in srgb, var(--color-gold) 40%, transparent),
         0 7px 20px rgba(75, 25, 36, .3);
 }
 
@@ -449,4 +294,9 @@
     .blood-btn::after {
         transition: none;
     }
+}
+
+/* Espace entre le header et la section Home */
+#home {
+    margin-top: 2.5rem;
 }

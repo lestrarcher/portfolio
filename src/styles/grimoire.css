@@ -26,8 +26,8 @@
     height: 1px;
     margin-top: 1.25rem;
     background: linear-gradient(90deg,
-            #C5A475,
-            rgba(197, 164, 117, 0.15),
+            var(--color-gold),
+            color-mix(in srgb, var(--color-gold) 15%, transparent),
             transparent);
 
     flex-basis: 100%;

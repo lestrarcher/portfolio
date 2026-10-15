@@ -1,0 +1,99 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><title>Thèmes et images indisponibles</title>
+<body style="margin:0"><iframe src="/" style="border:0;width:1440px;height:900px"></iframe><pre id="results">pending</pre>
+<script type="module">
+const frame = document.querySelector('iframe'), results = [], errors = [];
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const check = (name, pass) => results.push({name, pass});
+function failImage(image, src) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('Missing image did not report an error')), 5000);
+    image.addEventListener('error', () => { clearTimeout(timer); resolve(); }, {once:true});
+    image.src = src;
+  });
+}
+async function load(path) {
+  await new Promise(resolve => { frame.onload = resolve; frame.src = path; });
+  await sleep(300);
+  frame.contentWindow.addEventListener('error', event => errors.push(event.message));
+}
+function roots(root) {
+  return [root, ...[...root.querySelectorAll('*')].filter(node => node.shadowRoot).flatMap(node => roots(node.shadowRoot))];
+}
+function luminance(rgb) {
+  const values = rgb.match(/[\d.]+/g).slice(0,3).map(value => { value /= 255; return value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4; });
+  return values[0]*.2126 + values[1]*.7152 + values[2]*.0722;
+}
+const saved = localStorage.getItem('portfolio-theme');
+const atmosphereSaved = localStorage.getItem('portfolio-atmosphere');
+try {
+  localStorage.removeItem('portfolio-theme');
+  await load('/');
+  check('system default', frame.contentDocument.documentElement.dataset.theme === (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  for (const theme of ['dark','light']) {
+    frame.contentWindow.portfolioTheme.set(theme);
+    await load('/');
+    check('persist '+theme, frame.contentDocument.documentElement.dataset.theme === theme);
+    for (const route of ['/', '/projects/jdr-companion', '/projects/campaign-planner', '/projects/emissions']) {
+      await load(route);
+      const win = frame.contentWindow, doc = win.document;
+      const allRoots = roots(doc);
+      check('headers synchronized '+theme+route, allRoots.flatMap(root => [...root.querySelectorAll('.theme-toggle')]).every(button => button.getAttribute('aria-pressed') === String(theme === 'light')));
+      for (const width of [320,375,768,1440]) {
+        frame.style.width = width+'px'; await sleep(50);
+        check('no overflow '+theme+route+width, doc.documentElement.scrollWidth <= win.innerWidth);
+      }
+      const probe = doc.createElement('span'); doc.body.append(probe);
+      for (const color of ['text','muted','gold','accent']) {
+        probe.style.color = `var(--color-${color})`;
+        const fg = luminance(win.getComputedStyle(probe).color), bg = luminance(win.getComputedStyle(doc.body).backgroundColor);
+        check('text contrast '+theme+route+color, (Math.max(fg,bg)+.05)/(Math.min(fg,bg)+.05) >= 4.5);
+      }
+      probe.remove();
+      if (route === '/') {
+        const buttons = allRoots.flatMap(root => [...root.querySelectorAll('.theme-toggle')]);
+        buttons[0].click();
+        check('all toggles update '+theme, buttons.every(button => button.getAttribute('aria-pressed') === String(theme !== 'light')));
+        buttons[0].click();
+        const home = doc.querySelector('home-section'), select = home.shadowRoot.querySelector('select');
+        for (const atmosphere of ['grimoire','brumes','gothique']) {
+          select.value = atmosphere; select.dispatchEvent(new win.Event('change'));
+          check('atmosphere retained '+theme+atmosphere, home.dataset.atmosphere === atmosphere);
+        }
+        select.value = 'grimoire'; select.dispatchEvent(new win.Event('change'));
+      } else {
+        const root = doc.querySelector('project-detail').shadowRoot;
+        const image = root.querySelector('.gallery-image'), stage = root.querySelector('.gallery-stage');
+        await image.decode();
+        await failImage(image, '/missing-gallery-test.png');
+        check('main error '+theme+route, root.querySelector('.gallery-status').textContent === 'Image indisponible');
+        root.querySelector('.gallery-thumbnail').click(); await image.decode(); await sleep(50);
+        check('main recovers '+theme+route, root.querySelector('.gallery-status').textContent === '');
+        const thumbnail = root.querySelector('.gallery-thumbnail');
+        if (root.querySelectorAll('.gallery-thumbnail').length > 1) {
+          await failImage(thumbnail.querySelector('img'), '/missing-thumbnail-test.png');
+          check('thumbnail fallback '+theme+route, thumbnail.classList.contains('is-unavailable'));
+        }
+        stage.click(); const dialog = root.querySelector('dialog');
+        await failImage(dialog.querySelector('img'), '/missing-lightbox-test.png');
+        check('modal error '+theme+route, dialog.querySelector('.lightbox-status').textContent === 'Image indisponible' && dialog.querySelector('[data-zoom="0.5"]').disabled);
+        dialog.querySelector('[data-close]').click();
+        check('error close restores focus '+theme+route, !dialog.open && root.activeElement === stage && doc.documentElement.style.overflow !== 'hidden');
+      }
+    }
+  }
+  await new Promise(resolve => {
+    frame.onload = resolve;
+    frame.srcdoc = `<script>Object.defineProperty(window, 'localStorage', {get(){throw new Error('Storage unavailable')}})<\/script><script src="/theme.js"><\/script>`;
+  });
+  frame.contentWindow.portfolioTheme.set('light');
+  check('storage unavailable light', frame.contentDocument.documentElement.dataset.theme === 'light');
+  frame.contentWindow.portfolioTheme.set('dark');
+  check('storage unavailable dark', frame.contentDocument.documentElement.dataset.theme === 'dark');
+  check('no runtime errors', errors.length === 0);
+} catch(error) { results.push({name:'exception',pass:false,detail:error.stack}); }
+finally {
+  if(saved === null) localStorage.removeItem('portfolio-theme'); else localStorage.setItem('portfolio-theme',saved);
+  if(atmosphereSaved === null) localStorage.removeItem('portfolio-atmosphere'); else localStorage.setItem('portfolio-atmosphere',atmosphereSaved);
+}
+document.querySelector('#results').textContent = JSON.stringify({checks:results.length,failures:results.filter(result=>!result.pass)});
+</script></body></html>

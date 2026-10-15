@@ -28,7 +28,7 @@ class ProjectDetail extends HTMLElement {
                     <p class="subtitle">${project.subtitle}</p>
                 </header>
                 <section data-reveal>
-                    <h2>Contexte</h2><p>${project.description}</p>
+                    <h2>Contexte</h2><p>${project.context || project.description}</p>
                 </section>
                 ${project.story?.length ? `<section class="project-story" data-reveal>
                     <p class="eyebrow">Genèse du projet</p>
@@ -38,11 +38,12 @@ class ProjectDetail extends HTMLElement {
                         <h3>${step.title}</h3><p>${step.text}</p>
                     </div>`).join('')}</div>
                 </section>` : ''}
-                <section class="gallery" aria-label="Visuels du projet" tabindex="0" ${project.gallery.length > 1 ? 'aria-describedby="gallery-help"' : ''} ${project.gallery.length ? '' : 'hidden'} data-reveal>
+                ${project.gallery.length ? `<section class="gallery" aria-label="Visuels du projet" tabindex="0" ${project.gallery.length > 1 ? 'aria-describedby="gallery-help"' : ''} data-reveal>
                     <figure>
                         <div class="gallery-presentation">
                             <button type="button" class="gallery-stage" aria-haspopup="dialog">
                                 <img class="gallery-image" decoding="async">
+                                <span class="gallery-status" role="status"></span>
                             </button>
                         </div>
                         <figcaption class="gallery-captions" aria-live="polite" aria-atomic="true">
@@ -60,7 +61,13 @@ class ProjectDetail extends HTMLElement {
                         </button>`).join('')}
                     </div>
                     <p id="gallery-help" class="gallery-help" ${project.gallery.length > 1 ? '' : 'hidden'}>Utilisez les touches fléchées pour changer d’image.</p>
-                </section>
+                </section>` : ''}
+                ${project.milestone ? `<section class="project-milestone" aria-label="Bilan du projet" data-reveal>
+                    <p class="eyebrow">${project.milestone.date}</p>
+                    <dl class="milestone-grid">${project.milestone.indicators.map(indicator => `<div class="story-step milestone-card">
+                        <dt>${indicator.label}</dt><dd>${indicator.value}</dd>
+                    </div>`).join('')}</dl>
+                </section>` : ''}
                 <div class="detail-grid">
                     <section data-reveal><h2>Fonctionnalités</h2>
                         <ul>${project.features.map(feature => `<li>${feature}</li>`).join('')}</ul>
@@ -77,6 +84,7 @@ class ProjectDetail extends HTMLElement {
                     ${project.demo ? `<a href="${project.demo}" target="_blank" rel="noopener noreferrer">Voir le projet ↗</a>` : ''}
                     ${project.github ? `<a href="${project.github}" target="_blank" rel="noopener noreferrer">Code source ↗</a>` : ''}
                 </footer>
+                ${project.availabilityNote ? `<p class="availability-note">${project.availabilityNote}</p>` : ''}
             </article>`;
         this.initGallery(project.gallery);
         this.cleanupReveal = initGrimoireReveal(this.shadowRoot);
@@ -92,6 +100,14 @@ class ProjectDetail extends HTMLElement {
         const link = gallery.querySelector('.gallery-stage');
         const thumbnails = [...gallery.querySelectorAll('.gallery-thumbnail')];
         const captions = [...gallery.querySelectorAll('.gallery-caption')];
+        thumbnails.forEach((button, index) => {
+            const thumbnail = button.querySelector('img');
+            button.dataset.fallback = `Image ${index + 1}`;
+            const updateThumbnail = () => button.classList.toggle('is-unavailable', !thumbnail.naturalWidth);
+            thumbnail.addEventListener('error', updateThumbnail, options);
+            thumbnail.addEventListener('load', updateThumbnail, options);
+            if (thumbnail.complete) updateThumbnail();
+        });
         let activeIndex = 0;
         const presentation = gallery.querySelector('.gallery-presentation');
         gallery.classList.toggle('gallery--landscape', items.every(item =>
@@ -105,7 +121,13 @@ class ProjectDetail extends HTMLElement {
             if (ratio < 1) gallery.classList.remove('gallery--landscape');
             presentation.style.setProperty('--image-ratio', ratio);
         };
-        image.addEventListener('load', updateFormat, options);
+        const status = gallery.querySelector('.gallery-status');
+        const imageState = (state) => {
+            image.style.visibility = state === 'ready' ? '' : 'hidden';
+            status.textContent = state === 'error' ? 'Image indisponible' : state === 'loading' ? 'Chargement…' : '';
+        };
+        image.addEventListener('load', () => { imageState('ready'); updateFormat(); }, options);
+        image.addEventListener('error', () => imageState('error'), options);
         this.lightbox = createGalleryLightbox(this.shadowRoot, step => {
             if (items.length > 1) select(activeIndex + step);
         });
@@ -113,7 +135,9 @@ class ProjectDetail extends HTMLElement {
         const select = (index, followFocus = false) => {
             activeIndex = (index + items.length) % items.length;
             const item = items[activeIndex];
+            imageState('loading');
             image.src = item.src;
+            if (image.complete && image.naturalWidth) imageState('ready');
             image.alt = item.alt;
             for (const dimension of ['width', 'height']) {
                 if (item[dimension]) image.setAttribute(dimension, item[dimension]);

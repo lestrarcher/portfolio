@@ -1,0 +1,29 @@
+/* Shared editorial hierarchy, injected in each section's Shadow Root. */
+.section-heading {
+    min-width: 0;
+    margin-bottom: var(--section-heading-gap);
+}
+
+.section-heading .section-heading__eyebrow {
+    margin: 0 0 var(--space-small);
+    color: var(--color-accent);
+    font: 700 .72rem/1.5 var(--font-body);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+}
+
+.section-heading .section-heading__title {
+    margin: 0 0 var(--space-medium);
+    font: 500 clamp(1.65rem, 2.7vw, 2.6rem)/1.18 var(--font-display);
+    letter-spacing: -.02em;
+    text-wrap: balance;
+    color: var(--color-text);
+}
+
+.section-heading .section-heading__description {
+    max-width: 68ch;
+    margin: 0;
+    color: var(--color-muted);
+    font-size: .95rem;
+    line-height: 1.75;
+}

@@ -11,6 +11,8 @@ import './components/skills-section.js'
 import './components/home-section.js'
 import './components/arcane-dice.js'
 import './components/quest-progress.js';
+import './components/contact-section.js';
+import './components/career-section.js';
 
 import { initRouter } from './router.js';
 

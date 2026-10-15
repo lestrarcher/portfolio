@@ -4,13 +4,19 @@
   --color-surface: #211e21;
   --color-surface-raised: #292327;
   --color-blood: #79232e;
-  --color-accent: #ad626b;
+  --color-accent: #ba727b;
   --color-text: #e9e3dc;
   --color-muted: #a99a99;
   --color-border: #423239;
+  --color-border-strong: #80616b;
+  /* Engraved burgundy controls keep their own contrasting palette. */
+  --button-blood: #542630;
+  --button-blood-dark: #351b23;
+  --button-text: #f1e9df;
+  --button-gold: #c5a475;
   --color-gold: #c5a475;
   --header-bg: rgba(30, 27, 30, .96);
-  --hero-base: #181719;
+  --hero-base: #121113;
   --hero-ink: #79232e;
   --button-primary: #63252f;
   --button-primary-border: #96545f;
@@ -18,7 +24,11 @@
   --font-display: Georgia, 'Times New Roman', serif;
   --content-width: 1280px;
   --radius-card: 8px;
-  --section-space: clamp(4rem, 7vw, 7rem);
+  --space-small: .65rem;
+  --space-medium: 1rem;
+  --section-heading-gap: clamp(1.25rem, 2vw, 2rem);
+  --section-inset: clamp(1.25rem, 2vw, 1.75rem);
+  --section-space: clamp(1.75rem, 3vw, 3rem);
   --transition: 220ms ease;
   /* Static atmosphere: tune the Hero without changing its layout. */
   --hero-glow-opacity: .48;
@@ -38,7 +48,10 @@
   --color-text: #2e2428;
   --color-muted: #675b5e;
   --color-border: #cbb6a8;
-  --color-gold: #916a34;
+  --color-gold: #795323;
+  --color-border-strong: #987a66;
+  --button-blood: #783744;
+  --button-blood-dark: #542630;
   --header-bg: rgba(248, 240, 230, .97);
   --hero-base: #eee6db;
   --hero-ink: #9d5b62;

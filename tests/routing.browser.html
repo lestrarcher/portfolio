@@ -1,6 +1,7 @@
 <!doctype html><html lang="fr"><meta charset="utf-8"><title>Tests du routage</title>
 <body style="margin:0"><iframe id="site" src="/" style="border:0;width:1440px;height:900px"></iframe><pre id="results">pending</pre>
-<script>
+<script type="module">
+import { projects } from '/src/data/projects.js';
 const frame=document.querySelector('iframe'), results=[], errors=[];
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function check(name,pass,detail=''){results.push({name,pass,detail});}
@@ -29,7 +30,7 @@ async function ready(){
    const detail=doc.querySelector('project-detail');
    check('route '+id,win.location.pathname==='/projects/'+id && detail?.getAttribute('project-id')===id);
    check('five sections '+id,['Contexte','Fonctionnalités','Choix techniques','Défis','Résultats'].every(title=>detail.shadowRoot.textContent.includes(title)));
-   check('missing facts explicit '+id,detail.shadowRoot.textContent.includes('À compléter.'));
+   check('project facts '+id, ['technicalChoices','challenges','results'].every(key => detail.shadowRoot.textContent.includes(projects.find(project => project.id === id)[key] || 'À compléter.')));
    check('quest detached '+id,!doc.querySelector('quest-progress'));
    check('heading focused '+id,detail.shadowRoot.activeElement?.tagName==='H1');
    const imgs=[...detail.shadowRoot.querySelectorAll('img')];
@@ -47,7 +48,7 @@ async function ready(){
   for(const width of [1440,768,375,320]){
    frame.style.width=width+'px';await sleep(100);
    check('detail overflow '+width,doc.documentElement.scrollWidth<=win.innerWidth);
-   const header=doc.querySelector('site-header'),root=header.shadowRoot,button=root.querySelector('button'),nav=root.querySelector('nav');
+   const header=doc.querySelector('site-header'),root=header.shadowRoot,button=root.querySelector('.menu-toggle'),nav=root.querySelector('nav');
    if(width<=900){
     check('closed menu '+width,win.getComputedStyle(nav).display==='none' && button.getAttribute('aria-expanded')==='false');
     button.focus();button.click();
@@ -59,9 +60,9 @@ async function ready(){
    }
   }
   const header=doc.querySelector('site-header'),root=header.shadowRoot;
-  root.querySelector('button').click();root.querySelector('a[href="/#skills"]').click();await sleep(300);
+  root.querySelector('.menu-toggle').click();root.querySelector('a[href="/#skills"]').click();await sleep(300);
   check('mobile selection to home',win.location.pathname==='/' && win.location.hash==='#skills' && doc.querySelector('quest-progress').activeId==='skills');
-  check('grimoire retained',doc.getElementById('skills').shadowRoot.querySelector('[data-reveal="chapter"]').classList.contains('is-revealed'));
+  check('grimoire retained',doc.getElementById('skills').shadowRoot.querySelector('[data-reveal]').classList.contains('is-revealed'));
   check('all cards visible on mobile',cards.every(card=>win.getComputedStyle(card).display!=='none'));
   check('home overflow',doc.documentElement.scrollWidth<=win.innerWidth);
   const dead=doc.createElement('a');dead.href='/projects/inexistant';doc.body.append(dead);dead.click();await sleep(250);
@@ -76,6 +77,6 @@ async function ready(){
    check('direct load no overflow '+id,frame.contentDocument.documentElement.scrollWidth<=frame.contentWindow.innerWidth);
   }
  }catch(error){check('exception',false,error.stack);}
- document.querySelector('#results').textContent=JSON.stringify(results,null,2);
+ document.querySelector('#results').textContent=JSON.stringify({checks:results.length,failures:results.filter(result=>!result.pass)});
 })();
 </script></body></html>

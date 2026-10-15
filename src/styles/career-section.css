@@ -1,0 +1,461 @@
+:host {
+   display: block;
+   box-sizing: border-box;
+   width: 100%;
+   padding: var(--section-space, 5rem) clamp(1.25rem, 5vw, 5rem);
+   color: var(--color-text);
+   font-family: var(--font-body);
+   scroll-margin-top: 5rem
+}
+
+:host *,
+:host *::before,
+:host *::after {
+   box-sizing: border-box
+}
+
+.career {
+   max-width: var(--content-width, 1280px);
+   margin-inline: auto;
+   padding: var(--section-inset) 0;
+   border-block: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent)
+}
+
+.career-heading {
+   max-width: 720px;
+   margin-bottom: 2rem
+}
+
+.career-kicker {
+   font-size: .72rem;
+   font-weight: 700;
+   letter-spacing: .18em;
+   color: var(--color-accent);
+   margin: 0 0 1rem
+}
+
+.career-heading h2 {
+   font: 500 clamp(2rem, 4vw, 3.4rem)/1.15 var(--font-display);
+   letter-spacing: -.02em;
+   margin: 0 0 1rem
+}
+
+.career-heading>p:last-child {
+   color: var(--color-muted);
+   line-height: 1.75
+}
+
+.career-layout {
+   display: grid;
+   grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+   gap: clamp(1.2rem, 3vw, 2.6rem);
+   align-items: start
+}
+
+.career-feature {
+   position: relative;
+   min-width: 0;
+   padding: clamp(1.4rem, 2.5vw, 2.25rem);
+   background: var(--color-surface);
+   border: 1px solid color-mix(in srgb, var(--color-gold) 55%, var(--color-border));
+   border-radius: 3px;
+   box-shadow: inset 0 0 0 4px var(--color-surface), inset 0 0 0 5px color-mix(in srgb, var(--color-gold) 17%, transparent), 0 12px 30px #0001
+}
+
+.career-feature::before,
+.career-feature::after {
+   content: '';
+   position: absolute;
+   width: 18px;
+   height: 18px;
+   pointer-events: none;
+   opacity: .7
+}
+
+.career-feature::before {
+   left: 11px;
+   top: 11px;
+   border-top: 1px solid var(--color-gold);
+   border-left: 1px solid var(--color-gold)
+}
+
+.career-feature::after {
+   right: 11px;
+   bottom: 11px;
+   border-right: 1px solid var(--color-gold);
+   border-bottom: 1px solid var(--color-gold)
+}
+
+.career-feature__top,
+.career-history__label {
+   font-size: .69rem;
+   letter-spacing: .17em;
+   font-weight: 700;
+   color: var(--color-accent)
+}
+
+.career-feature__top {
+   display: flex;
+   align-items: center;
+   gap: .55rem
+}
+
+.career-feature__star {
+   color: var(--color-gold);
+   font-size: .9rem
+}
+
+.career-feature__date {
+   margin: 1.7rem 0 .55rem;
+   color: var(--color-gold);
+   font-size: .72rem;
+   letter-spacing: .08em;
+   font-weight: 600
+}
+
+.career-feature h3 {
+   margin: 0;
+   font: 500 clamp(1.65rem, 2.5vw, 2.35rem)/1.2 var(--font-display)
+}
+
+.career-feature__place {
+   margin: .5rem 0 0;
+   color: var(--color-accent);
+   font-size: 1rem
+}
+
+.career-feature__rule {
+   height: 1px;
+   margin: 1.5rem 0;
+   background: linear-gradient(90deg, color-mix(in srgb, var(--color-gold) 55%, transparent), transparent)
+}
+
+.career-feature__projects {
+   display: grid;
+   gap: 1.3rem
+}
+
+.career-feature__project h4 {
+   margin: 0 0 .4rem;
+   font: 600 1rem/1.4 var(--font-body);
+   color: var(--color-text)
+}
+
+.career-feature__project p {
+   margin: 0;
+   color: var(--color-muted);
+   font-size: .88rem;
+   line-height: 1.75
+}
+
+.career-feature__tags {
+   display: flex;
+   flex-wrap: wrap;
+   gap: .5rem;
+   padding: 0;
+   margin: 0;
+   list-style: none
+}
+
+.career-feature__tags li {
+   border: 1px solid color-mix(in srgb, var(--color-gold) 26%, var(--color-border));
+   background: color-mix(in srgb, var(--color-surface-raised) 80%, transparent);
+   padding: .35rem .6rem;
+   font-size: .72rem;
+   color: var(--color-muted);
+   border-radius: 2px
+}
+
+.career-feature__link {
+   display: inline-flex;
+   align-items: center;
+   gap: .6rem;
+   margin-top: 1.5rem;
+   color: var(--color-accent);
+   text-decoration: none;
+   border-bottom: 1px solid color-mix(in srgb, var(--color-gold) 50%, transparent);
+   padding-bottom: .25rem;
+   font-size: .84rem;
+   font-weight: 600
+}
+
+.career-feature__link:hover {
+   color: var(--color-text)
+}
+
+.career-feature__link:focus-visible {
+   outline: 2px solid var(--color-gold);
+   outline-offset: 4px
+}
+
+.career-history {
+   min-width: 0
+}
+
+.career-history__label {
+   margin: .4rem 0 1rem
+}
+
+.career-timeline {
+   list-style: none;
+   padding: 0 0 0 1.3rem;
+   margin: 0;
+   position: relative;
+   display: grid;
+   gap: .8rem
+}
+
+.career-timeline::before {
+   content: '';
+   position: absolute;
+   left: .43rem;
+   top: 1rem;
+   bottom: 1rem;
+   width: 1px;
+   background: linear-gradient(var(--color-gold), color-mix(in srgb, var(--color-gold) 25%, transparent))
+}
+
+.career-step {
+   position: relative;
+   min-width: 0
+}
+
+.career-node {
+   position: absolute;
+   left: -1.24rem;
+   top: 1.35rem;
+   width: 11px;
+   height: 11px;
+   border: 1px solid var(--color-gold);
+   border-radius: 50%;
+   background: var(--color-background);
+   z-index: 1;
+   box-shadow: 0 0 0 3px var(--color-background)
+}
+
+.career-step:has(details[open]) .career-node {
+   background: var(--color-accent);
+   box-shadow: 0 0 0 3px var(--color-background), 0 0 10px color-mix(in srgb, var(--color-accent) 40%, transparent)
+}
+
+.career-card {
+   min-width: 0;
+   position: relative;
+   background: var(--color-surface);
+   border: 1px solid color-mix(in srgb, var(--color-gold) 27%, var(--color-border));
+   border-radius: 3px;
+   box-shadow: inset 0 0 0 3px var(--color-surface), inset 0 0 0 4px color-mix(in srgb, var(--color-gold) 11%, transparent);
+   overflow: hidden
+}
+
+.career-card[open] {
+   border-color: color-mix(in srgb, var(--color-gold) 58%, var(--color-border))
+}
+
+.career-card summary {
+   position: relative;
+   list-style: none;
+   display: flex;
+   flex-direction: column;
+   gap: .3rem;
+   padding: 1rem 2.4rem 1rem 1rem;
+   cursor: pointer
+}
+
+.career-card summary::-webkit-details-marker {
+   display: none
+}
+
+.career-card summary:hover {
+   background: color-mix(in srgb, var(--color-gold) 5%, transparent)
+}
+
+.career-card summary:focus-visible {
+   outline: 2px solid var(--color-gold);
+   outline-offset: -5px
+}
+
+.career-meta {
+   font-size: .62rem;
+   font-weight: 700;
+   letter-spacing: .08em;
+   line-height: 1.5;
+   color: var(--color-accent)
+}
+
+.career-meta span {
+   padding-inline: .25rem;
+   color: var(--color-gold)
+}
+
+.career-card-title {
+   font: 500 clamp(1rem, 1.5vw, 1.23rem)/1.25 var(--font-display)
+}
+
+.career-place {
+   font-size: .79rem;
+   line-height: 1.5;
+   color: var(--color-muted)
+}
+
+.career-chevron {
+   position: absolute;
+   right: 1.05rem;
+   top: 50%;
+   width: 8px;
+   height: 8px;
+   border-right: 1px solid var(--color-gold);
+   border-bottom: 1px solid var(--color-gold);
+   transform: translateY(-65%) rotate(45deg);
+   transition: transform .2s ease
+}
+
+.career-card[open] .career-chevron {
+   transform: translateY(-25%) rotate(225deg)
+}
+
+.career-content {
+   margin: 0 1rem 1rem;
+   padding-top: .85rem;
+   border-top: 1px solid color-mix(in srgb, var(--color-gold) 22%, transparent);
+   color: var(--color-muted);
+   font-size: .82rem;
+   line-height: 1.7
+}
+
+.career-content ul {
+   margin: 0;
+   padding-left: 1.1rem
+}
+
+.career-content li+li {
+   margin-top: .4rem
+}
+
+.career-content li::marker {
+   color: var(--color-gold)
+}
+
+@media(max-width:900px) {
+   .career-layout {
+      grid-template-columns: 1fr
+   }
+
+   .career-feature {
+      max-width: none
+   }
+
+   .career-history__label {
+      margin-top: .4rem
+   }
+}
+
+@media(max-width:600px) {
+   :host {
+      padding: var(--section-space) 1.25rem
+   }
+
+   .career-heading {
+      margin-bottom: 1.5rem
+   }
+
+   .career-feature {
+      padding: 1.4rem
+   }
+
+   .career-card summary {
+      padding: 1rem 2.3rem 1rem .9rem
+   }
+
+   .career-content {
+      margin-inline: .9rem
+   }
+}
+
+@media(prefers-reduced-motion:reduce) {
+   .career-chevron {
+      transition: none
+   }
+}
+
+/* En-têtes alignés au-dessus des deux colonnes */
+.career-feature-column {
+   min-width: 0
+}
+
+.career-column-label {
+   display: flex;
+   align-items: center;
+   min-height: 1.4rem;
+   margin: 0 0 1rem;
+   font-size: .69rem;
+   letter-spacing: .17em;
+   font-weight: 700;
+   color: var(--color-accent)
+}
+
+.career-column-label--featured {
+   gap: .55rem
+}
+
+.career-column-label--featured span {
+   color: var(--color-gold);
+   font-size: .9rem
+}
+
+.career-feature__date {
+   margin-top: .2rem
+}
+
+.career-history__label {
+   display: none
+}
+
+/* Code couleur des jalons : professionnel / projet / formation.
+   Mélange avec la couleur de texte pour conserver une bonne lisibilité sur parchemin. */
+.career-step[data-kind="work"] {
+   --career-kind: color-mix(in srgb, #B87883 78%, var(--color-text))
+}
+
+.career-step[data-kind="project"] {
+   --career-kind: color-mix(in srgb, #B99A70 78%, var(--color-text))
+}
+
+.career-step[data-kind="education"] {
+   --career-kind: color-mix(in srgb, #819E9A 78%, var(--color-text))
+}
+
+.career-step .career-node {
+   border-color: var(--career-kind)
+}
+
+.career-step:has(details[open]) .career-node {
+   background: var(--career-kind);
+   box-shadow: 0 0 0 3px var(--color-background), 0 0 10px color-mix(in srgb, var(--career-kind) 35%, transparent)
+}
+
+.career-step .career-meta {
+   color: var(--career-kind)
+}
+
+.career-step .career-meta span {
+   color: var(--career-kind)
+}
+
+.career-step .career-card[open] {
+   border-color: color-mix(in srgb, var(--career-kind) 52%, var(--color-border))
+}
+
+.career-step .career-content li::marker {
+   color: var(--career-kind)
+}
+
+@media(max-width:900px) {
+   .career-column-label {
+      margin-bottom: .8rem
+   }
+
+   .career-history {
+      margin-top: .5rem
+   }
+}

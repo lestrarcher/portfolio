@@ -20,7 +20,7 @@
 #about-me {
     width: 100%;
     /* margin: 3rem auto; */
-    padding: 1.75rem 0 3rem;
+    padding: var(--section-inset) 0;
     border-top: 1px solid var(--color-border, #543238);
     border-bottom: 1px solid var(--color-border, #543238);
     display: flex;
@@ -32,7 +32,7 @@
     min-width: 0;
     overflow-wrap: anywhere;
     margin-bottom: 1.5rem;
-    background-color: rgba(33, 30, 33, .94);
+    background-color: color-mix(in srgb, var(--color-surface) 94%, transparent);
 }
 
 .about-me-presentation__subtitle,
@@ -65,7 +65,7 @@
     min-width: 0;
     overflow-wrap: anywhere;
 
-    background-color: rgba(33, 30, 33, .94);
+    background-color: color-mix(in srgb, var(--color-surface) 94%, transparent);
 }
 
 .about-me-skills__list {
@@ -124,7 +124,7 @@ skill-card {
     max-width: var(--content-width, 1280px);
     margin-inline: auto;
     gap: clamp(1.5rem, 3vw, 3rem);
-    border-color: rgba(173, 98, 107, .22)
+    border-color: color-mix(in srgb, var(--color-accent) 22%, transparent)
 }
 
 #about-me h1,
@@ -152,14 +152,14 @@ skill-card {
 
 @media(max-width:600px) {
     :host {
-        padding: 3.5rem 1.25rem
+        padding: var(--section-space) 1.25rem
     }
 }
 
 .about-me-presentation,
 .about-me-skills {
     padding: 1.5rem;
-    border: 1px solid rgba(173, 98, 107, .15);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 15%, transparent);
     border-radius: 8px
 }
 
@@ -172,9 +172,10 @@ skill-card {
 /* Blood Button — Édition Prestige */
 
 .blood-btn {
-    --blood: #542630;
-    --blood-dark: #351b23;
-    --gold: #c5a475;
+    --blood: var(--button-blood);
+    --blood-dark: var(--button-blood-dark);
+    --gold: var(--button-gold);
+    --color-gold: var(--button-gold);
 
     position: relative;
     isolation: isolate;
@@ -187,7 +188,7 @@ skill-card {
     min-height: 2.8rem;
     padding: .75rem 1.4rem;
 
-    color: #f1e9df;
+    color: var(--button-text);
     background:
         linear-gradient(145deg,
             rgba(255, 255, 255, .065),
@@ -196,7 +197,7 @@ skill-card {
             var(--blood),
             var(--blood-dark));
 
-    border: 1px solid rgba(197, 164, 117, .55);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
     border-radius: 2px;
 
     font: 500 .82rem/1.3 var(--font-body);
@@ -206,7 +207,7 @@ skill-card {
 
     box-shadow:
         inset 0 0 0 3px rgba(31, 18, 22, .85),
-        inset 0 0 0 4px rgba(197, 164, 117, .22),
+        inset 0 0 0 4px color-mix(in srgb, var(--color-gold) 22%, transparent),
         0 4px 14px rgba(0, 0, 0, .12);
 
     cursor: pointer;
@@ -252,7 +253,7 @@ skill-card {
 
     box-shadow:
         inset 0 0 0 3px rgba(31, 18, 22, .85),
-        inset 0 0 0 4px rgba(197, 164, 117, .4),
+        inset 0 0 0 4px color-mix(in srgb, var(--color-gold) 40%, transparent),
         0 7px 20px rgba(75, 25, 36, .3);
 }
 
@@ -365,8 +366,8 @@ skill-card {
 /* Édition prestige : page de grimoire, même grille et même contenu. */
 #about-me {
     position: relative;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: var(--section-inset);
+    padding-bottom: var(--section-inset);
     align-items: stretch
 }
 

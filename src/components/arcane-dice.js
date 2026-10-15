@@ -28,6 +28,8 @@ const faceNormal = f => { const [a, b, c] = f.map(i => VERTICES[i]); let n = nor
 const NORMALS = FACES.map(faceNormal);
 
 class ArcaneDice extends HTMLElement {
+    #rollCount = 0;
+
     constructor() {
         super(); this.attachShadow({ mode: 'open' });
         this.shadowRoot.innerHTML = `
@@ -66,7 +68,8 @@ class ArcaneDice extends HTMLElement {
     }
     roll() {
         if (this.rolling) return;
-        this.visibleNumber = Math.floor(Math.random() * 20) + 1;
+        this.visibleNumber = this.#rollCount === 0 ? 20 : Math.floor(Math.random() * 20) + 1;
+        this.#rollCount++;
         const normal = NORMALS[this.visibleNumber - 1];
         this.startQ = this.orientation.slice();
         this.targetQ = mul(axisAngle([0, 0, 1], .2), fromTo(normal, [0, 0, 1]));

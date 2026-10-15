@@ -17,8 +17,8 @@
 #skills {
     max-width: var(--content-width, 1280px);
     margin: auto;
-    padding: 1.75rem 0 3rem;
-    border-block: 1px solid rgba(173, 98, 107, .22);
+    padding: var(--section-inset) 0;
+    border-block: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: clamp(.75rem, 2vw, 1.6rem);
@@ -29,9 +29,9 @@
     position: relative;
     min-width: 0;
     padding: 1.3rem 1.1rem 1.5rem;
-    background: rgba(33, 30, 33, .94);
-    border: 1px solid rgba(197, 164, 117, .36);
-    box-shadow: inset 0 0 0 3px rgba(33, 30, 33, .95), inset 0 0 0 4px rgba(197, 164, 117, .15);
+    background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 36%, transparent);
+    box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--color-surface) 95%, transparent), inset 0 0 0 4px color-mix(in srgb, var(--color-gold) 15%, transparent);
     border-radius: 2px
 }
 
@@ -47,15 +47,15 @@
 .skills-panel::before {
     left: 8px;
     top: 8px;
-    border-top: 1px solid rgba(197, 164, 117, .7);
-    border-left: 1px solid rgba(197, 164, 117, .7)
+    border-top: 1px solid color-mix(in srgb, var(--color-gold) 70%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--color-gold) 70%, transparent)
 }
 
 .skills-panel::after {
     right: 8px;
     bottom: 8px;
-    border-right: 1px solid rgba(197, 164, 117, .7);
-    border-bottom: 1px solid rgba(197, 164, 117, .7)
+    border-right: 1px solid color-mix(in srgb, var(--color-gold) 70%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-gold) 70%, transparent)
 }
 
 .skills-panel__title {
@@ -73,7 +73,7 @@
     position: relative;
     height: 1px;
     margin: 1.05rem 0 1.15rem;
-    background: linear-gradient(90deg, rgba(197, 164, 117, .8), rgba(197, 164, 117, .16))
+    background: linear-gradient(90deg, color-mix(in srgb, var(--color-gold) 80%, transparent), color-mix(in srgb, var(--color-gold) 16%, transparent))
 }
 
 .skills-panel__rule::after {
@@ -82,9 +82,9 @@
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    background: #211e21;
+    background: var(--color-surface);
     padding-left: .35rem;
-    color: #c5a475;
+    color: var(--color-gold);
     font-size: .65rem
 }
 
@@ -104,7 +104,7 @@
 .skills-panel__footer {
     display: block;
     text-align: center;
-    color: rgba(197, 164, 117, .6);
+    color: color-mix(in srgb, var(--color-gold) 60%, transparent);
     font-size: .65rem;
     margin-top: 1.4rem
 }
@@ -117,9 +117,10 @@ tech-card {
 /* Blood Button — Édition Prestige */
 
 .blood-btn {
-    --blood: #542630;
-    --blood-dark: #351b23;
-    --gold: #c5a475;
+    --blood: var(--button-blood);
+    --blood-dark: var(--button-blood-dark);
+    --gold: var(--button-gold);
+    --color-gold: var(--button-gold);
 
     position: relative;
     isolation: isolate;
@@ -132,7 +133,7 @@ tech-card {
     min-height: 2.8rem;
     padding: .75rem 1.4rem;
 
-    color: #f1e9df;
+    color: var(--button-text);
     background:
         linear-gradient(145deg,
             rgba(255, 255, 255, .065),
@@ -141,7 +142,7 @@ tech-card {
             var(--blood),
             var(--blood-dark));
 
-    border: 1px solid rgba(197, 164, 117, .55);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
     border-radius: 2px;
 
     font: 500 .82rem/1.3 var(--font-body);
@@ -151,7 +152,7 @@ tech-card {
 
     box-shadow:
         inset 0 0 0 3px rgba(31, 18, 22, .85),
-        inset 0 0 0 4px rgba(197, 164, 117, .22),
+        inset 0 0 0 4px color-mix(in srgb, var(--color-gold) 22%, transparent),
         0 4px 14px rgba(0, 0, 0, .12);
 
     cursor: pointer;
@@ -197,7 +198,7 @@ tech-card {
 
     box-shadow:
         inset 0 0 0 3px rgba(31, 18, 22, .85),
-        inset 0 0 0 4px rgba(197, 164, 117, .4),
+        inset 0 0 0 4px color-mix(in srgb, var(--color-gold) 40%, transparent),
         0 7px 20px rgba(75, 25, 36, .3);
 }
 
@@ -237,7 +238,7 @@ tech-card {
 
 @media(max-width:600px) {
     :host {
-        padding: 3.5rem 1.25rem
+        padding: var(--section-space) 1.25rem
     }
 
     #skills {

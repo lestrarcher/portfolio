@@ -18,7 +18,8 @@ export const projects = [
         gallery: [
             { src: '/projects/jdr-player-display.png', width: 1920, height: 1032, alt: 'Affichage destiné aux joueurs : illustration d’un dragon, quêtes et informations de session', caption: 'Écran joueurs — projection des médias, des quêtes et de l’ambiance.', layout: 'wide' },
             { src: '/projects/jdr-character-resources.png', width: 331, height: 716, alt: 'Fiche mobile : points de vie, dés de vie et ressources', caption: 'Fiche numérique — suivi des points de vie et des ressources.', layout: 'portrait' },
-            { src: '/projects/jdr-character-abilities.png', width: 331, height: 717, alt: 'Fiche mobile : liste des capacités et description détaillée', caption: 'Fiche numérique — consultation des capacités et de leurs descriptions.', layout: 'portrait' }
+            { src: '/projects/jdr-character-abilities.png', width: 331, height: 717, alt: 'Fiche mobile : liste des capacités et description détaillée', caption: 'Fiche numérique — consultation des capacités et de leurs descriptions.', layout: 'portrait' },
+            { src: '/projects/jdr-companion.png', width: 1920, height: 1032, alt: 'Interface du MJ : gestion des personnages dans une session', caption: 'Écran MJ - gestion des personnages rattachés  à une session.', layout: 'wide' },
         ],
         story: [
             { title: 'Un problème concret autour de la table', text: 'Les fiches papier devenaient difficiles à lire à force de gommer et de réécrire les ressources. Certaines notes se perdaient entre les sessions et les annotations sur tableau blanc pouvaient être effacées.' },
@@ -119,38 +120,66 @@ export const projects = [
         title: 'eMissions',
         subtitle: 'Simplifier les processus métier',
         category: 'Projet professionnel',
-        description:
-            'Une application métier développée pour Nîmes Université, ' +
-            'destinée à la gestion des missions et des frais professionnels. ' +
-            'Elle centralise les demandes, les circuits de validation ' +
-            'et les interactions avec le système d’information.',
+        description: "Conception et développement d'une application métier pour Nîmes Université, transformant des procédures papier disparates en une plateforme centralisée de gestion des déplacements professionnels, des validations et des remboursements.",
+        context: 'À Nîmes Université, la gestion des déplacements professionnels reposait sur des procédures papier hétérogènes. eMissions a été conçue pour réunir les demandes, les validations et les remboursements dans une plateforme centralisée. J’ai assuré seul la conception et le développement de l’application, à partir des besoins recueillis auprès des services.',
         technologies: [
             'React',
+            'TypeScript',
             'Symfony',
             'PHP',
             'Oracle',
             'MySQL'
         ],
-        image: '/projects/emissions-concept.svg',
+        image: '/projects/emissions.png',
         imageAlt: 'Illustration conceptuelle de eMissions, sans données internes',
-        gallery: [
-            { src: '/projects/emissions-detail.svg', width: 1200, height: 600, alt: 'Composition abstraite autour des documents et des échanges', caption: 'Illustration conceptuelle — aucune capture de l’application ni donnée interne.' }
-        ],
+        gallery: [],
+        milestone: {
+            date: 'Bilan à juillet 2026',
+            indicators: [
+                { value: '3 000+', label: 'Ordres de mission' },
+                { value: '1 500+', label: 'États de frais' },
+                { value: '~20', label: 'Circuits de validation' }
+            ]
+        },
+        availabilityNote: 'Application interne — démonstration publique non disponible.',
         features: [
-            'Calendrier partagé des disponibilités par créneau',
-            'Synthèse des possibilités de réunion du groupe',
-            'Validation de la date par le maître du jeu',
-            'Création de sessions avec nom et horaires',
-            'Notifications par e-mail aux participants',
-            'Gestion des campagnes et des participants',
-            'Tableaux de bord MJ et joueur',
-            'Historique des sessions et notes du MJ',
-            'Notifications par e-mail à la création des sessions',
-            'Rappels automatiques sept jours avant une session',
-        ],
-        technicalChoices: 'Développée avec Symfony, PHP, JavaScript et PostgreSQL, l’application centralise les disponibilités et synthétise les créneaux possibles. Le maître du jeu conserve la validation finale des sessions. Le système intègre des notifications par e-mail, des rappels programmés sept jours avant les sessions et utilise également Symfony Messenger.',
-        challenges: 'Concevoir une planification collective lisible sur plusieurs semaines, avec des interfaces adaptées aux joueurs et aux maîtres du jeu. Assurer la cohérence entre les disponibilités, les sessions confirmées et les notifications, tout en évitant de multiplier les actions manuelles.',
-        results: 'CampaignPlanner centralise la gestion des campagnes et des disponibilités, accompagne le choix des dates et automatise les communications liées aux sessions, depuis leur création jusqu’au rappel envoyé sept jours avant.',
+            'Gestion complète des ordres de mission, états de frais et lettres d’invitation.',
+            'Circuits de validation multi-étapes, adaptés aux services et aux différents types de missions.',
+            'Gestion des indemnités, frais de déplacement, justificatifs et imputations budgétaires.',
+            'Tableaux de bord de suivi pour les agents, gestionnaires et valideurs.',
+            'Génération de documents PDF et gestion des profils utilisateurs.',
+            'Intégration aux référentiels et services d’authentification du système d’information.'
+            ],
+
+        technicalChoices:
+        'Architecture full-stack associant React, TypeScript et Redux Toolkit ' +
+        'à une API Symfony / PHP structurée autour de services métier réutilisables. ' +
+        'Doctrine et MySQL assurent la persistance des données applicatives, ' +
+        'tandis qu’Oracle permet de consulter les référentiels du système ' +
+        'd’information universitaire. L’authentification repose notamment ' +
+        'sur CAS et JWT, avec une gestion des rôles et des habilitations. ' +
+        'L’architecture a évolué progressivement pour améliorer sa ' +
+        'maintenabilité et accompagner les changements fonctionnels.',
+
+        challenges:
+        'Le principal défi a été de transformer des procédures papier ' +
+        'hétérogènes en parcours numériques cohérents, sans perdre les ' +
+        'spécificités administratives des différents services. ' +
+        'La conception des circuits de validation, avec leurs multiples ' +
+        'acteurs, étapes et conditions, a nécessité une modélisation ' +
+        'métier particulièrement poussée. Le développement en autonomie ' +
+        'impliquait également de concilier nouvelles fonctionnalités, ' +
+        'maintenance en production, retours utilisateurs et évolutions ' +
+        'des règles administratives.',
+
+        results:
+        'Déployée en production, eMissions a permis de centraliser et de ' +
+        'dématérialiser les démarches liées aux déplacements professionnels. ' +
+        'L’application offre un suivi structuré des demandes et de leurs ' +
+        'validations, tout en tenant compte des spécificités administratives ' +
+        'des différents services. Des guides utilisateurs, gestionnaires ' +
+        'et techniques ont également été rédigés pour accompagner son ' +
+        'utilisation et sa maintenance.',
         github: null,
         demo: null,
         featured: true

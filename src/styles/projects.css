@@ -19,7 +19,7 @@
 
 #projects {
   width: 100%;
-  padding: 1.75rem 0 3rem;
+  padding: var(--section-inset) 0;
   border-top: 1px solid var(--color-border, #543238);
   border-bottom: 1px solid var(--color-border, #543238);
 }
@@ -123,7 +123,7 @@ project-card {
   max-width: var(--content-width, 1280px);
   margin-inline: auto;
   gap: clamp(1.5rem, 3vw, 3rem);
-  border-color: rgba(173, 98, 107, .22)
+  border-color: color-mix(in srgb, var(--color-accent) 22%, transparent)
 }
 
 #projects h1,
@@ -151,7 +151,7 @@ project-card {
 
 @media(max-width:600px) {
   :host {
-    padding: 3.5rem 1.25rem
+    padding: var(--section-space) 1.25rem
   }
 }
 

@@ -1,17 +1,12 @@
 import questStyles from '../styles/quest-progress.css?inline';
+import { navigationSections } from '../data/navigation.js';
 
 class QuestProgress extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
 
-        this.chapters = [
-            { id: 'home', label: 'Accueil' },
-            { id: 'projects', label: 'Projets' },
-            { id: 'skills', label: 'Compétences' },
-            { id: 'about-me', label: 'À propos' },
-            { id: 'contact', label: 'Contact' }
-        ];
+        this.chapters = navigationSections;
 
         this.sections = [];
         this.frame = null;
@@ -75,8 +70,7 @@ class QuestProgress extends HTMLElement {
                 ...chapter,
                 element: document.getElementById(chapter.id)
             }))
-            .filter(chapter => chapter.element !== null)
-            .sort((a, b) => a.element.compareDocumentPosition(b.element) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
+            .filter(chapter => chapter.element !== null);
 
         // Masquer les chapitres dont la section n'existe pas encore.
         this.shadowRoot.querySelectorAll('[data-id]').forEach(link => {
@@ -138,15 +132,15 @@ class QuestProgress extends HTMLElement {
             if (!this.isConnected) return;
             const section = this.sections[index];
             const notice = this.shadowRoot.querySelector('.chapter-notice');
-            const roman = ['I', 'II', 'III', 'IV', 'V'][index] ?? String(index + 1);
+            const roman = ['I', 'II', 'III', 'IV', 'V', 'VI'][index] ?? String(index + 1);
             notice.querySelector('.chapter-notice__text').textContent = `CHAPITRE ${roman} — ${section.label.toLocaleUpperCase('fr')}`;
             notice.hidden = false;
             if (!this.motion.matches) {
                 const marker = this.shadowRoot.querySelector(`[data-id="${section.id}"] .quest-progress__marker`);
                 this.chapterAnimations = [
                     marker.animate([
-                        { transform: 'scale(1.2)', boxShadow: '0 0 0 0 #c5a47566' },
-                        { transform: 'scale(1.45)', boxShadow: '0 0 0 7px #c5a47500', offset: 0.6 },
+                        { transform: 'scale(1.2)', boxShadow: '0 0 0 0 color-mix(in srgb, var(--color-gold) 40%, transparent)' },
+                        { transform: 'scale(1.45)', boxShadow: '0 0 0 7px transparent', offset: 0.6 },
                         { transform: 'scale(1.2)' }
                     ], { duration: 500, easing: 'ease-out' }),
                     notice.animate([

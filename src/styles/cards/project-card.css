@@ -11,7 +11,7 @@
     height: 100%;
     overflow: hidden;
 
-    background: #211e21;
+    background: var(--color-surface);
     border: 1px solid var(--color-border, #543238);
     border-radius: var(--radius-card, 8px);
     box-shadow: 0 12px 32px rgba(0, 0, 0, .15);
@@ -23,7 +23,7 @@
 }
 
 .card:focus-within {
-    border-color: #c5a475;
+    border-color: var(--color-gold);
     box-shadow: 0 10px 24px #0005;
 }
 
@@ -38,7 +38,7 @@
     opacity: 0;
 
     background: radial-gradient(180px circle at var(--reflection-x, 50%) var(--reflection-y, 50%),
-            #c5a47519,
+            color-mix(in srgb, var(--color-gold) 9.8%, transparent),
             transparent 100%);
 
     transition: opacity 180ms ease;
@@ -55,7 +55,7 @@
     background:
         radial-gradient(circle at 50% 50%,
             #4a2932,
-            #181719 80%);
+            var(--hero-base) 80%);
 
     border-bottom: 1px solid var(--color-border, #543238);
 }
@@ -84,19 +84,20 @@
 }
 
 .card-visual__category {
+    --color-gold: var(--button-gold);
     position: absolute;
     top: 1rem;
     left: 1rem;
     z-index: 2;
 
     padding: .4rem .7rem;
-    border: 1px solid rgba(197, 164, 117, .4);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 40%, transparent);
     border-radius: 4px;
 
     background: rgba(24, 23, 25, .88);
     backdrop-filter: blur(6px);
 
-    color: #c5a475;
+    color: var(--color-gold);
     font-size: .65rem;
     font-weight: 600;
     letter-spacing: .09em;
@@ -115,7 +116,7 @@
 .card-body__subtitle {
     margin: 0 0 .45rem;
 
-    color: #c5a475;
+    color: var(--color-gold);
     font-size: .72rem;
     letter-spacing: .045em;
 }
@@ -148,7 +149,7 @@
 .card-body__tags span {
     padding: .25rem .65rem;
 
-    border: 1px solid #665158;
+    border: 1px solid var(--color-border-strong);
     border-radius: 999px;
 
     color: var(--color-text, #e9e3dc);
@@ -165,11 +166,11 @@
     gap: 1rem;
 
     padding: 1rem 1.2rem;
-    border-top: 1px solid #ffffff12;
+    border-top: 1px solid var(--color-border);
 }
 
 .card-link a {
-    color: #c5a475;
+    color: var(--color-gold);
     text-decoration: none;
     font-size: .8rem;
     font-weight: 600;
@@ -179,17 +180,17 @@
 
 .card-link a:hover,
 .card-link a:focus-visible {
-    color: #e9e3dc;
+    color: var(--color-text);
 }
 
 .card-link a:focus-visible {
-    outline: 2px solid #c5a475;
+    outline: 2px solid var(--color-gold);
     outline-offset: 4px;
     border-radius: 2px;
 }
 
 .card-link__unavailable {
-    color: #938b87;
+    color: var(--color-muted);
     font-size: .8rem;
     font-style: italic;
 }
@@ -199,7 +200,7 @@
 @media (hover: hover) and (pointer: fine) {
     .card:hover {
         transform: translateY(-4px);
-        border-color: #c5a475;
+        border-color: var(--color-gold);
         box-shadow: 0 16px 36px #0006;
     }
 

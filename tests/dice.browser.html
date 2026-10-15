@@ -1,0 +1,43 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><title>Premier lancer du d20</title>
+<body><pre id="results">pending</pre><script type="module">
+import '/src/components/arcane-dice.js';
+const results = [], check = (name, pass) => results.push({name, pass});
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const random = Math.random;
+let dice;
+async function finish() {
+  for (let i=0;i<100 && dice.rolling;i++) await sleep(50);
+  check('animation completes', !dice.rolling && !dice.button.disabled && !dice.stage.classList.contains('rolling'));
+}
+try {
+  dice = document.createElement('arcane-dice'); document.body.append(dice);
+  dice.motion = {matches:false};
+  Math.random = () => 0;
+  const initial = [...dice.orientation];
+  dice.button.click();
+  check('animation starts', dice.rolling && dice.button.disabled && dice.duration === 2300);
+  check('intermediate message preserved', dice.result.textContent === 'Le destin est en marche…');
+  dice.button.click(); dice.roll();
+  check('duplicate click ignored', dice.visibleNumber === 20);
+  await sleep(150);
+  check('orientation animates', dice.orientation.some((value, i) => value !== initial[i]));
+  await finish();
+  check('first natural 20', dice.visibleNumber === 20 && dice.result.classList.contains('critical'));
+  // A controlled random source verifies the original mapping, rather than relying on luck.
+  dice.button.click(); await finish();
+  check('second uses random lower bound', dice.visibleNumber === 1 && !dice.result.classList.contains('critical'));
+  dice.motion = {matches:true};
+  Math.random = () => .5; dice.button.click();
+  check('subsequent random middle', dice.visibleNumber === 11 && !dice.rolling);
+  Math.random = () => .99999; dice.button.click();
+  check('subsequent random upper bound', dice.visibleNumber === 20);
+  dice.remove(); document.body.append(dice);
+  Math.random = () => .25; dice.button.click();
+  check('reconnection retains counter', dice.visibleNumber === 6);
+  dice.remove(); dice = document.createElement('arcane-dice'); document.body.append(dice);
+  dice.motion = {matches:true}; dice.button.click();
+  check('new instance starts at 20 with reduced motion', dice.visibleNumber === 20 && !dice.rolling);
+} catch(error) { results.push({name:'exception',pass:false,detail:error.stack}); }
+finally { Math.random = random; dice?.remove(); }
+document.querySelector('#results').textContent = JSON.stringify({checks:results.length,failures:results.filter(result => !result.pass)});
+</script></body></html>

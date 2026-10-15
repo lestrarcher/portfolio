@@ -1,3 +1,4 @@
+import headingStyles from '../styles/section-heading.css?inline';
 import sectionStyles from '../styles/projects.css?inline';
 import grimoireStyles from '../styles/grimoire.css?inline';
 import { initGrimoireReveal } from '../utils/grimoire-reveal.js';
@@ -27,18 +28,19 @@ class Projects extends HTMLElement {
         `).join('');
 
         this.shadowRoot.innerHTML = `
-            <style>${sectionStyles}</style><style>${grimoireStyles}</style>
+            <style>${sectionStyles}</style><style>${headingStyles}</style><style>${grimoireStyles}</style>
 
             <section id="projects">
-                <div class="projects-header" data-reveal="chapter">
+                <header class="projects-header section-heading" data-reveal="chapter">
                     <div class="projects-header__category">
                         <img src="https://campaign-planner.alwaysdata.net/images/logo.png"  class="projects-header__category-img" />
                         <div class="projects-header__category-id">
-                            <h1 class="projects-header__category-id__name">Journal de quêtes</h1>
-                            <h2 class="projects-header__category-id__subname">Mes projets</h2>
+                            <p class="projects-header__category-id__name section-heading__eyebrow">Journal de quêtes</p>
+                            <h2 class="projects-header__category-id__subname section-heading__title">Mes projets</h2>
+                            <p class="section-heading__description">Applications personnelles et professionnelles, du jeu de rôle aux outils métier.</p>
                         </div>
                     </div>
-                </div>
+                </header>
                 <div class="projects-list">
                     <div class="projects-list__display">
                         ${projectCards}

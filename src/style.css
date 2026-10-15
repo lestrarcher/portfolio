@@ -19,7 +19,16 @@ body {
   background-color: var(--color-background);
 }
 
-/* A single, static paper layer continues beneath the lighter sections. */
+/* One continuous grimoire atmosphere for every section and project page. */
+body {
+  color: var(--color-text);
+  background-color: var(--hero-base);
+  background-image:
+    repeating-linear-gradient(112deg, transparent 0 32px, color-mix(in srgb, var(--color-gold) 2.35%, transparent) 33px, transparent 34px 92px),
+    radial-gradient(ellipse 50% 35% at 95% 14%, color-mix(in srgb, var(--color-blood) 18%, transparent), transparent 70%),
+    linear-gradient(120deg, color-mix(in srgb, var(--color-blood) 6%, transparent), transparent 55%);
+}
+
 body::before {
   content: '';
   position: absolute;
@@ -27,13 +36,15 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background: url('./assets/paper-grain.svg') repeat;
-  opacity: var(--section-grain-opacity, .02);
+  background-size: 145px;
+  opacity: .16;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
 
-/* A faint illuminated parchment structure, layered below page content. */
-body { color: var(--color-text); background-image: radial-gradient(ellipse 55% 35% at 85% 10%, color-mix(in srgb, var(--color-blood) 12%, transparent), transparent 90%), radial-gradient(ellipse 40% 25% at 10% 58%, color-mix(in srgb, var(--color-gold) 5%, transparent), transparent 95%); }
-body::before { background-size: 210px 210px; }
+/* Keep the header and project-detail margins inside the textured page. */
+main {
+  display: flow-root;
+}
