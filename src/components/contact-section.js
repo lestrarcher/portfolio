@@ -29,7 +29,7 @@ class ContactSection extends HTMLElement {
 
   <a
     class="secondary-btn"
-    href="/cv.pdf"
+    href="/documents/CV-Mickael-Kern.pdf"
     download="CV-Mickael-Kern.pdf"
     type="application/pdf"
   >
